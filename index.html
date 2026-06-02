@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDD Imtihon</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #1a1a1a; color: white; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 500px; margin: 0 auto; }
+        img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+        .question { font-size: 18px; font-weight: bold; margin-bottom: 20px; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background-color: #333; color: white; border: 2px solid #555; border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background-color: #444; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>1-Bilet. 1-Savol</h2>
+    <img src="https://via.placeholder.com/400x250" alt="Chizma"> 
+    <div class="question">Chorrahada qaysi transport vositasi birinchi bo'lib o'tadi?</div>
+    <button class="btn" onclick="checkAnswer(true)">A) Ko'k avtomobil</button>
+    <button class="btn" onclick="checkAnswer(false)">B) Qizil avtomobil</button>
+    <button class="btn" onclick="checkAnswer(false)">C) Yuk avtomobili</button>
+</div>
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    function checkAnswer(isCorrect) {
+        if (isCorrect) { alert("To'g'ri! 🎉"); } 
+        else { alert("Noto'g'ri! ❌"); }
+    }
+</script>
+</body>
+</html>
