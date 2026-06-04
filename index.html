@@ -15,7 +15,6 @@
             -webkit-user-select: none;
             user-select: none;
         }
-        /* Блок самого теста */
         #quiz-container {
             display: block;
         }
@@ -64,7 +63,6 @@
             opacity: 1;
             cursor: default;
         }
-        /* Блок итоговых результатов */
         #result-container {
             display: none;
             padding: 30px 10px;
@@ -97,6 +95,7 @@
 </head>
 <body>
 
+    <!-- ЭКРАН ТЕСТА -->
     <div id="quiz-container">
         <div id="ticket-info"></div>
         <div id="question-text">Загрузка вопроса...</div>
@@ -104,6 +103,7 @@
         <div id="options-container"></div>
     </div>
 
+    <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
     <div id="result-container">
         <div id="result-title">Bilet yakunlandi!</div>
         <div class="stat-box stat-correct" id="correct-stat">To'g'ri: 0</div>
@@ -111,6 +111,7 @@
         <button id="next-ticket-btn" class="btn">Keyingi bilet →</button>
     </div>
 
+    <!-- Скрипты -->
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
