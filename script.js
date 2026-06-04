@@ -1,117 +1,150 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ПДД Тест</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            background-color: #1c1c1e;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            text-align: center;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        /* Блок самого теста */
-        #quiz-container {
-            display: block;
-        }
-        #ticket-info {
-            font-size: 15px;
-            color: #8e8e93;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-        #question-text {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-        #question-img {
-            max-width: 100%;
-            max-height: 250px;
-            height: auto;
-            border-radius: 12px;
-            margin: 15px auto;
-            display: none;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            margin: 12px 0;
-            padding: 16px;
-            background-color: #2c2c2e;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-        }
-        .btn:active {
-            transform: scale(0.99);
-        }
-        .btn:disabled {
-            color: white;
-            opacity: 1;
-            cursor: default;
-        }
-        /* Блок итоговых результатов */
-        #result-container {
-            display: none;
-            padding: 30px 10px;
-        }
-        #result-title {
-            font-size: 26px;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-        .stat-box {
-            font-size: 20px;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-        }
-        .stat-correct {
-            background-color: rgba(52, 199, 89, 0.2);
-            color: #34c759;
-        }
-        .stat-incorrect {
-            background-color: rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-        }
-        #next-ticket-btn {
-            background-color: #007aff;
-            margin-top: 40px;
-        }
-    </style>
-</head>
-<body>
+// Перехватываем абсолютно любые глобальные ошибки до старта кода
+window.onerror = function(message, source, lineno, colno, error) {
+    const qText = document.getElementById("question-text");
+    if (qText) {
+        qText.innerHTML = `<span style="color: #ff3b30;">Глобальная ошибка скрипта:<br>${message}<br>Строка: ${lineno}</span>`;
+    }
+    return false;
+};
 
-    <div id="quiz-container">
-        <div id="ticket-info"></div>
-        <div id="question-text">Загрузка вопроса...</div>
-        <img id="question-img" src="" alt="Регулировщик/Знак">
-        <div id="options-container"></div>
-    </div>
+try {
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.expand(); }
 
-    <div id="result-container">
-        <div id="result-title">Bilet yakunlandi!</div>
-        <div class="stat-box stat-correct" id="correct-stat">To'g'ri: 0</div>
-        <div class="stat-box stat-incorrect" id="incorrect-stat">Noto'g'ri: 0</div>
-        <button id="next-ticket-btn" class="btn">Keyingi bilet →</button>
-    </div>
+    // Проверяем наличие базы данных
+    if (typeof allTickets === 'undefined') {
+        throw new Error("Переменная 'allTickets' не найдена. Файл data.js не загрузился или содержит ошибку.");
+    }
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+    // Состояние приложения
+    let currentTicketNum = 1;
+    let currentTicket = allTickets[String(currentTicketNum)];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    // Проверяем первый билет
+    if (!currentTicket) {
+        throw new Error(`Билет под номером '${currentTicketNum}' не найден в объекте allTickets.`);
+    }
+
+    // Элементы страницы
+    const quizContainer = document.getElementById("quiz-container");
+    const resultContainer = document.getElementById("result-container");
+    const ticketInfo = document.getElementById("ticket-info");
+    const questionText = document.getElementById("question-text");
+    const questionImg = document.getElementById("question-img");
+    const optionsContainer = document.getElementById("options-container");
+    const correctStat = document.getElementById("correct-stat");
+    const incorrectStat = document.getElementById("incorrect-stat");
+    const nextTicketBtn = document.getElementById("next-ticket-btn");
+
+    function showQuestion() {
+        try {
+            if (!currentTicket) {
+                alert("Barcha biletlar tugadi! Test boshidan boshlanadi.");
+                currentTicketNum = 1;
+                currentTicket = allTickets["1"];
+                resetCounters();
+            }
+
+            quizContainer.style.display = "block";
+            resultContainer.style.display = "none";
+
+            const q = currentTicket[currentIndex];
+            if (!q) {
+                throw new Error(`Вопрос по индексу ${currentIndex} отсутствует в билете ${currentTicketNum}`);
+            }
+            
+            if (ticketInfo) {
+                ticketInfo.innerText = `${currentTicketNum}-Bilet | Savol: ${currentIndex + 1}/${currentTicket.length}`;
+            }
+            
+            questionText.innerText = q.question;
+
+            // Картинка
+            if (q.image && q.image !== "no_image" && q.image !== "") {
+                questionImg.src = q.image;
+                questionImg.style.display = "block";
+            } else {
+                questionImg.style.display = "none";
+                questionImg.src = "";
+            }
+
+            // Ответы
+            optionsContainer.innerHTML = "";
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement("button");
+                btn.className = "btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, q.answer, btn);
+                optionsContainer.appendChild(btn);
+            });
+        } catch (e) {
+            questionText.innerHTML = `<span style="color: #ff3b30;">Ошибка внутри showQuestion:<br>${e.message}</span>`;
+        }
+    }
+
+    function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
+        const buttons = optionsContainer.querySelectorAll(".btn");
+        buttons.forEach(b => b.disabled = true);
+
+        if (selectedIndex === correctAnswerIndex) {
+            btnElement.style.backgroundColor = "#34c759";
+            correctCount++;
+            setTimeout(goToNext, 600);
+        } else {
+            btnElement.style.backgroundColor = "#ff3b30";
+            if (buttons[correctAnswerIndex]) {
+                buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
+            }
+            incorrectCount++;
+            setTimeout(goToNext, 1500);
+        }
+    }
+
+    function goToNext() {
+        currentIndex++;
+        if (currentIndex < currentTicket.length) {
+            showQuestion();
+        } else {
+            showResultsView();
+        }
+    }
+
+    function showResultsView() {
+        quizContainer.style.display = "none";
+        resultContainer.style.display = "block";
+        if (correctStat) correctStat.innerText = `To'g'ri javoblar: ${correctCount}`;
+        if (incorrectStat) incorrectStat.innerText = `Noto'g'ri javoblar: ${incorrectCount}`;
+    }
+
+    if (nextTicketBtn) {
+        nextTicketBtn.onclick = () => {
+            currentTicketNum++;
+            if (allTickets[String(currentTicketNum)]) {
+                currentTicket = allTickets[String(currentTicketNum)];
+                resetCounters();
+                showQuestion();
+            } else {
+                alert("Siz hamma biletlarni yubordingiz! Test 1-biletga qaytadi.");
+                currentTicketNum = 1;
+                currentTicket = allTickets["1"];
+                resetCounters();
+                showQuestion();
+            }
+        };
+    }
+
+    function resetCounters() {
+        currentIndex = 0;
+        correctCount = 0;
+        incorrectCount = 0;
+    }
+
+    // Старт
+    showQuestion();
+
+} catch (globalError) {
+    document.getElementById("question-text").innerHTML = `<span style="color: #ff3b30;">Критическая ошибка инициализации:<br>${globalError.message}</span>`;
+}
