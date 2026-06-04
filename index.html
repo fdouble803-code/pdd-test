@@ -12,8 +12,19 @@
             font-family: Arial, sans-serif;
             padding: 20px;
             text-align: center;
-            -webkit-user-select: none; /* Отключаем выделение текста */
+            -webkit-user-select: none;
             user-select: none;
+        }
+        /* Контейнер для вопросов */
+        #quiz-container {
+            display: block;
+        }
+        #ticket-info {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         #question-text {
             font-size: 20px;
@@ -47,19 +58,57 @@
         .btn:active {
             transform: scale(0.99);
         }
-        /* Стили для заблокированных кнопок, чтобы они не становились тусклыми */
         .btn:disabled {
             color: white;
             opacity: 1;
             cursor: default;
         }
+        /* Контейнер для результатов */
+        #result-container {
+            display: none;
+            padding: 30px 10px;
+        }
+        #result-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            font-size: 20px;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        .stat-correct {
+            background-color: rgba(52, 199, 89, 0.2);
+            color: #34c759;
+        }
+        .stat-incorrect {
+            background-color: rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+        }
+        #next-ticket-btn {
+            background-color: #007aff; /* Синяя кнопка Telegram */
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="question-text">Загрузка вопроса...</div>
-    <img id="question-img" src="" alt="Регулировщик/Знак">
-    <div id="options-container"></div>
+    <div id="quiz-container">
+        <div id="ticket-info">Загрузка...</div>
+        <div id="question-text">Загрузка вопроса...</div>
+        <img id="question-img" src="" alt="Регулировщик/Знак">
+        <div id="options-container"></div>
+    </div>
+
+    <div id="result-container">
+        <div id="result-title">Bilet yakunlandi!</div>
+        <div class="stat-box stat-correct" id="correct-stat">To'g'ri: 0</div>
+        <div class="stat-box stat-incorrect" id="incorrect-stat">Noto'g'ri: 0</div>
+        <button id="next-ticket-btn" class="btn">Keyingi bilet →</button>
+    </div>
 
     <script src="data.js"></script>
     <script src="script.js"></script>
