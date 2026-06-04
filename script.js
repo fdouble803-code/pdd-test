@@ -1,166 +1,117 @@
-// 1. Инициализация Telegram Web App
-const tg = window.Telegram.WebApp;
-if (tg) {
-    tg.expand();
-}
-
-// Безопасный алерт (работает везде)
-function safeAlert(message, callback) {
-    if (tg && tg.showAlert) {
-        tg.showAlert(message, callback);
-    } else {
-        alert(message);
-        if (callback) callback();
-    }
-}
-
-// Проверка загрузки базы данных из data.js
-if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
-    document.getElementById("question-text").innerText = "Xatolik: data.js fayli yuklanmadi!";
-    console.error("Переменная allTickets не найдена.");
-} else {
-    
-    // Глобальное состояние игры
-    let currentTicketNum = 1; // Номер текущего билета
-    let currentTicket = allTickets[String(currentTicketNum)];
-    let currentIndex = 0;     // Номер текущего вопроса (0-19)
-    
-    // Счетчики правильных и неправильных ответов
-    let correctCount = 0;
-    let incorrectCount = 0;
-
-    // Получаем DOM элементы
-    const quizContainer = document.getElementById("quiz-container");
-    const resultContainer = document.getElementById("result-container");
-    const ticketInfo = document.getElementById("ticket-info");
-    const questionText = document.getElementById("question-text");
-    const questionImg = document.getElementById("question-img");
-    const optionsContainer = document.getElementById("options-container");
-    
-    const correctStat = document.getElementById("correct-stat");
-    const incorrectStat = document.getElementById("incorrect-stat");
-    const nextTicketBtn = document.getElementById("next-ticket-btn");
-
-    // Функция отображения вопроса
-    function showQuestion() {
-        // Проверяем, существует ли такой билет в data.js
-        if (!currentTicket) {
-            safeAlert("Barcha biletlar tugadi! Test boshidan boshlanadi.", () => {
-                currentTicketNum = 1;
-                currentTicket = allTickets["1"];
-                resetCounters();
-                showQuestion();
-            });
-            return;
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПДД Тест</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #1c1c1e;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+            -webkit-user-select: none;
+            user-select: none;
         }
-
-        // Показываем блок теста, скрываем блок результатов
-        quizContainer.style.display = "block";
-        resultContainer.style.display = "none";
-
-        const q = currentTicket[currentIndex];
-        
-        // Обновляем инфо-строку (например: "1-BILET | SAVOL: 5/20")
-        ticketInfo.innerText = `${currentTicketNum}-Bilet | Savol: ${currentIndex + 1}/${currentTicket.length}`;
-        
-        // Текст вопроса
-        questionText.innerText = q.question;
-
-        // Картинка вопроса
-        if (q.image && q.image !== "no_image" && q.image !== "") {
-            questionImg.src = q.image;
-            questionImg.style.display = "block";
-        } else {
-            questionImg.style.display = "none";
-            questionImg.src = "";
+        /* Блок самого теста */
+        #quiz-container {
+            display: block;
         }
-
-        // Кнопки ответов
-        optionsContainer.innerHTML = "";
-        q.options.forEach((opt, index) => {
-            const btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index, q.answer, btn); 
-            optionsContainer.appendChild(btn);
-        });
-    }
-
-    // Функция проверки ответа
-    function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
-        const buttons = optionsContainer.querySelectorAll(".btn");
-        buttons.forEach(b => b.disabled = true); // Блокируем клики
-
-        if (selectedIndex === correctAnswerIndex) {
-            btnElement.style.backgroundColor = "#34c759"; // Зеленый
-            correctCount++; // Плюс к правильным
-            
-            setTimeout(() => {
-                goToNext();
-            }, 600);
-        } else {
-            btnElement.style.backgroundColor = "#ff3b30"; // Красный
-            if (buttons[correctAnswerIndex]) {
-                buttons[correctAnswerIndex].style.backgroundColor = "#34c759"; // Подсказка
-            }
-            incorrectCount++; // Плюс к неправильным
-
-            setTimeout(() => {
-                goToNext();
-            }, 1500);
+        #ticket-info {
+            font-size: 15px;
+            color: #8e8e93;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
         }
-    }
-
-    // Логика перехода к следующему шагу
-    function goToNext() {
-        currentIndex++;
-        
-        // Если в билете еще есть вопросы (меньше 20)
-        if (currentIndex < currentTicket.length) {
-            showQuestion();
-        } else {
-            // Если ответили на все 20 вопросов — открываем экран результатов
-            showResultsView();
+        #question-text {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
-    }
-
-    // Показ экрана результатов
-    function showResultsView() {
-        quizContainer.style.display = "none";
-        resultContainer.style.display = "block";
-        
-        // Записываем собранную статистику в элементы
-        correctStat.innerText = `To'g'ri javoblar: ${correctCount}`;
-        incorrectStat.innerText = `Noto'g'ri javoblar: ${incorrectCount}`;
-    }
-
-    // Клик по кнопке "Перейти в следующий билет"
-    nextTicketBtn.onclick = () => {
-        currentTicketNum++; // Переключаем на следующий номер билета
-        
-        // Проверяем, есть ли следующий билет в базе данных data.js
-        if (allTickets[String(currentTicketNum)]) {
-            currentTicket = allTickets[String(currentTicketNum)];
-            resetCounters();
-            showQuestion();
-        } else {
-            // Если билеты кончились (например, дошли до конца вашей базы)
-            safeAlert("Siz hamma biletlarni yubordingiz! Test 1-biletga qaytadi.", () => {
-                currentTicketNum = 1;
-                currentTicket = allTickets["1"];
-                resetCounters();
-                showQuestion();
-            });
+        #question-img {
+            max-width: 100%;
+            max-height: 250px;
+            height: auto;
+            border-radius: 12px;
+            margin: 15px auto;
+            display: none;
         }
-    };
+        .btn {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 16px;
+            background-color: #2c2c2e;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+        .btn:active {
+            transform: scale(0.99);
+        }
+        .btn:disabled {
+            color: white;
+            opacity: 1;
+            cursor: default;
+        }
+        /* Блок итоговых результатов */
+        #result-container {
+            display: none;
+            padding: 30px 10px;
+        }
+        #result-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            font-size: 20px;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        .stat-correct {
+            background-color: rgba(52, 199, 89, 0.2);
+            color: #34c759;
+        }
+        .stat-incorrect {
+            background-color: rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+        }
+        #next-ticket-btn {
+            background-color: #007aff;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
 
-    // Сброс счетчиков перед новым билетом
-    function resetCounters() {
-        currentIndex = 0;
-        correctCount = 0;
-        incorrectCount = 0;
-    }
+    <div id="quiz-container">
+        <div id="ticket-info"></div>
+        <div id="question-text">Загрузка вопроса...</div>
+        <img id="question-img" src="" alt="Регулировщик/Знак">
+        <div id="options-container"></div>
+    </div>
 
-    // Самый первый запуск приложения
-    showQuestion();
-}
+    <div id="result-container">
+        <div id="result-title">Bilet yakunlandi!</div>
+        <div class="stat-box stat-correct" id="correct-stat">To'g'ri: 0</div>
+        <div class="stat-box stat-incorrect" id="incorrect-stat">Noto'g'ri: 0</div>
+        <button id="next-ticket-btn" class="btn">Keyingi bilet →</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
