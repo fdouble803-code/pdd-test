@@ -108,10 +108,8 @@ const allTickets = {
     { "ticket": 5, "id": 18, "question": "Egri yo'lda harakatlanayotgan avtomobil turg'unligi quyidagi qaysi holatda ta'minlangan?", "image": "ticket5_q18.png", "options": ["Uzatma ulangan holatda", "Uzatma ajratilgan holatda", "Tezlik oshirilganda"], "answer": 0 },
     { "ticket": 5, "id": 19, "question": "Transport vositasini orqaga harakatlantirish paytida haydovchi qanday talablarni bajarishi kerak?", "image": "ticket5_q19.png", "options": ["Harakatning boshqa ishtirokchilariga xalaqit bermaslik. Harakat xavfsizligini ta'minlash uchun zarur bo'lsa, boshqa shaxslar yordamidan foydalanish", "Boshqa shaxslar yordamidan foydalanish", "Transport vositasida orqa tumanga qarshi chiroqlar bo'lsa, ularni yoqish", "Gabarit chiroqlarini yo'qish"], "answer": 0 },
     { "ticket": 5, "id": 20, "question": "Qaysi transport vositasining haydovchisi yo'l berishi kerak?", "image": "ticket5_q20.png", "options": ["Avtomobil haydovchisi", "Tramvay haydovchisi"], "answer": 1 }
-  ]
-};
-  
-  6: [
+  ],
+  "6": [
     { "ticket": 6, "id": 2, "question": "Bu belgi nimani bildiradi?", "image": "{CAFC3817-D902-42F0-BB09-09378C508AA8}.png", "options": ["Ro'paradan kelayotgan transport vositalariga nisbatan birinchi o'tish huquqini beradi", "Haydovchi ro'paradan harakatlanayotgan transport vositasiga yo'l berishi kerak", "Bir tomonlama harakatli yo'l qismining tamom bo'lganini bildiradi"], "answer": 1 },
     { "ticket": 6, "id": 3, "question": "Ushbu svetofor harakatlanishni taqiqlaydi:", "image": "no_image", "options": ["Faqat chapga", "To'g'riga va chapga", "To'g'riga va o'ngga", "Faqat o'ngga"], "answer": 0 },
     { "ticket": 6, "id": 4, "question": "Qoidalarga ko'ra shatakka olish vaqtida bir-biriga ulangan transport vositalari tarkibining qanday umumiy uzunligiga yo'l qo'yiladi?", "image": "no_image", "options": ["20 m.", "21 m.", "22 m.", "23 m.", "24 m."], "answer": 0 },
@@ -132,7 +130,7 @@ const allTickets = {
     { "ticket": 6, "id": 19, "question": "Chorrahadan uchinchi bo'lib o'tadi:", "image": "{BC84C422-3D02-468A-AE55-2836A5CAD86C}.png", "options": ["Yashil avtomobil", "Qizil avtomobil", "Ko'k avtomobil", "Sariq avtomobil"], "answer": 2 },
     { "ticket": 6, "id": 20, "question": "Haydovchi tormozlanishda boshlangan avtomobilning sirpanib ketishini to'xtatish uchun bajarish kerak:", "image": "no_image", "options": ["Boshlangan tormozlashni bas qilishi", "Uzgichni ajratishi", "Tormoz tepkisini oxirigacha bosishi", "Uzgichni ajratishi va to'xtab turish tormozi bilan tormozlashi"], "answer": 0 }
   ],
-  7: [
+  "7": [
     { "ticket": 7, "id": 1, "question": "Qaysi transport vositalarining haydovchilari qoidani buzib to'xtadilar?", "image": "{BBEAF8EC-F0A0-4B53-9C98-E0EA7834C73D}.jpg", "options": ["Faqat A", "Faqat Б", "Faqat B", "Б va B", "A va Б"], "answer": 4 },
     { "ticket": 7, "id": 2, "question": "Qaysi javobda chorrahadan o'tish tartibi to'g'ri ko'rsatilgan?", "image": "{BBEAF8EC-F0A0-4B53-9C98-E0EA7834C73D}.jpg", "options": ["Avtobus, avtomobil, velosiped", "Avtomobil, avtobus, velosiped", "Velosiped, avtobus, avtomobil"], "answer": 2 },
     { "ticket": 7, "id": 3, "question": "Chorrahani ikkinchi bo'lib kesib o'tadi:", "image": "{BBEAF8EC-F0A0-4B53-9C98-E0EA7834C73D}.jpg", "options": ["Qizil avtomobil", "Ko'k avtomobil", "Yashil avtomobil"], "answer": 1 },
@@ -154,7 +152,7 @@ const allTickets = {
     { "ticket": 7, "id": 19, "question": "Sirpanchiq yo'lda orqa yetakchi avtomobil uchun tormozlashning qaysi usuli xavfsiz to'xtashni ta'minlaydi?", "image": "{23AD8CF1-03D3-491C-A71D-A68C402B67E1}.jpg", "options": ["Ulagichni uzmasdan tormoz tepkisini keskin bosish", "Ulagichni uzmasdan tormoz tepkisini ko'plab marta uzuq-uzuq bosish va qo'yib yuborish", "Ulagichni uzgan holda tormozlash"], "answer": 1 },
     { "ticket": 7, "id": 20, "question": "Agar yo'l boshlanishida ushbu belgi turgan bo'lsa qatnov qisminng chap chetidagi bo'lakka o'tish mumkinmi?", "image": "{86396385-A271-4211-910C-B95D15C185A4}.png", "options": ["Chapga burilish uchun mumkin", "Quvib o'tish uchun mumkin, agar ro'paradan harakatlanish bo'lmasa va bo'lak qatnov qismining qolgan bo'lagidan uzuq-uzuq chizig'i bilan ajratilgan bo'lsa", "Hech qanday holatda mumkin emas"], "answer": 2 }
   ],
-  8: [
+  "8": [
     { "ticket": 8, "id": 1, "question": "Ushbu holatda qaysi avtomobil birinchi o'tadi?", "image": "{F2A045D0-19B3-4A20-BE11-C65EF958EAED}.jpg", "options": ["Qizil avtomobil", "Ko'k avtomobil"], "answer": 0 },
     { "ticket": 8, "id": 2, "question": "Qaysi transport vositasi qoidalarni buzib to'xtadi?", "image": "{F2A045D0-19B3-4A20-BE11-C65EF958EAED}.jpg", "options": ["Faqat ko'k avtomobil", "Faqat qizil avtomobil", "Ikkalasi ham to'g'ri to'xtagan"], "answer": 1 },
     { "ticket": 8, "id": 3, "question": "Siz chorrahada qaysi yo'nalishda harakatlanishga haqlisiz?", "image": "{F2A045D0-19B3-4A20-BE11-C65EF958EAED}.jpg", "options": ["To'g'riga", "O'ngga", "To'g'riga va o'ngga", "Chapga"], "answer": 2 },
@@ -176,7 +174,7 @@ const allTickets = {
     { "ticket": 8, "id": 19, "question": "Tashqi yoritish chiroqlari qaysi vaqtda yonishi shart?", "image": "no_image", "options": ["Tunda", "Kun davomida ham", "Tumanli havoda"], "answer": 2 },
     { "ticket": 8, "id": 20, "question": "Yo'l chiziqlari chizilmagan bo'lsa, qatorni qanday aniqlash kerak?", "image": "no_image", "options": ["Avtomobil kengligi bo'yicha", "Yo'l kengligi va oraliq masofa bo'yicha", "Belgilar bo'yicha"], "answer": 1 }
   ],
-  9: [
+  "9": [
     { "ticket": 9, "id": 1, "question": "Qaysi transport vositasi birinchi bo'lib o'tadi?", "image": "{270284AB-C6D9-4E0D-89C6-8238FADBED02}.jpg", "options": ["Qizil avtomobil", "Ko'k avtomobil", "Yashil avtomobil"], "answer": 1 },
     { "ticket": 9, "id": 2, "question": "Ushbu holatda qaysi avtomobil qoidani buzib to'xtadi?", "image": "{270284AB-C6D9-4E0D-89C6-8238FADBED02}.jpg", "options": ["Qizil", "Ko'k", "Ikkalasi ham to'g'ri"], "answer": 0 },
     { "ticket": 9, "id": 3, "question": "Belgi nimani anglatadi?", "image": "{BEFB11ED-288A-462D-AA55-A2DB467E4246}.png", "options": ["Kirish taqiqlanadi", "To'xtash taqiqlanadi", "To'xtab turish taqiqlanadi"], "answer": 0 },
@@ -198,7 +196,7 @@ const allTickets = {
     { "ticket": 9, "id": 19, "question": "Sizga piyodalar yo'l berishi kerakmi?", "image": "no_image", "options": ["Yo'q, siz yo'l berishingiz kerak", "Ha", "Vaziyatga bog'liq"], "answer": 0 },
     { "ticket": 9, "id": 20, "question": "Tungi vaqtda shaharda qaysi chiroqlardan foydalanish kerak?", "image": "no_image", "options": ["Yaqinni yorituvchi", "Uzoqni yorituvchi", "Gabarit"], "answer": 0 }
   ],
-  10: [
+  "10": [
     { "ticket": 10, "id": 1, "question": "Ushbu chorrahada qaysi transport vositasi birinchi bo'lib o'tadi?", "image": "{C54B0EB8-53EC-4EB1-AB7C-4C42553DDC1C}.jpg", "options": ["Qizil avtomobil", "Ko'k avtomobil", "Yashil avtomobil"], "answer": 1 },
     { "ticket": 10, "id": 2, "question": "Ushbu belgi nimani bildiradi?", "image": "{9A4A1528-5582-4619-8F9B-D3BD2BB9A8BA}.png", "options": ["Yo'l ta'mirlanmoqda", "Asosiy yo'l kesishuvi", "Ikkinchi darajali yo'l"], "answer": 1 },
     { "ticket": 10, "id": 3, "question": "Qaysi transport vositasi birinchi bo'lib o'tadi?", "image": "{5486AEA6-9178-4F93-908E-17FFED431A40}.jpg", "options": ["Sariq avtomobil", "Ko'k avtomobil"], "answer": 1 },
@@ -220,4 +218,4 @@ const allTickets = {
     { "ticket": 10, "id": 19, "question": "Chorrahada chapga burilishda kimga yo'l berish kerak?", "image": "no_image", "options": ["Ro'paradan kelayotganga", "O'ng tomondagiga", "Hech kimga"], "answer": 0 },
     { "ticket": 10, "id": 20, "question": "YTH joyini tark etish mumkinmi?", "image": "no_image", "options": ["Mumkin", "Taqiqlanadi", "Faqat shikast bo'lmasa"], "answer": 1 }
   ]
-};
+}
