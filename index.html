@@ -15,21 +15,14 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>1-Bilet. 1-Savol</h2>
-    <img src="https://via.placeholder.com/400x250" alt="Chizma"> 
-    <div class="question">Chorrahada qaysi transport vositasi birinchi bo'lib o'tadi?</div>
-    <button class="btn" onclick="checkAnswer(true)">A) Ko'k avtomobil</button>
-    <button class="btn" onclick="checkAnswer(false)">B) Qizil avtomobil</button>
-    <button class="btn" onclick="checkAnswer(false)">C) Yuk avtomobili</button>
-</div>
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    function checkAnswer(isCorrect) {
-        if (isCorrect) { alert("To'g'ri! 🎉"); } 
-        else { alert("Noto'g'ri! ❌"); }
-    }
-</script>
+
+    <div class="container" id="quiz">
+        <h2 id="question-text">Загрузка вопроса...</h2>
+        <img id="question-img" src="" alt="Chizma" style="display:none;">
+        <div id="options-container"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
