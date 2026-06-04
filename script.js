@@ -1,93 +1,87 @@
-// Перехватываем абсолютно любые глобальные ошибки до старта кода
-window.onerror = function(message, source, lineno, colno, error) {
-    const qText = document.getElementById("question-text");
-    if (qText) {
-        qText.innerHTML = `<span style="color: #ff3b30;">Глобальная ошибка скрипта:<br>${message}<br>Строка: ${lineno}</span>`;
+(function() {
+    // Безопасное получение Telegram WebApp
+    var tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg && typeof tg.expand === 'function') {
+        tg.expand();
     }
-    return false;
-};
 
-try {
-    const tg = window.Telegram?.WebApp;
-    if (tg) { tg.expand(); }
-
-    // Проверяем наличие базы данных
+    // Проверяем существование базы данных
     if (typeof allTickets === 'undefined') {
-        throw new Error("Переменная 'allTickets' не найдена. Файл data.js не загрузился или содержит ошибку.");
+        document.getElementById("question-text").style.color = "#ff3b30";
+        document.getElementById("question-text").innerHTML = "<b>Ошибка структуры:</b> Переменная 'allTickets' не найдена. Проверьте структуру вашего файла data.js!";
+        return;
     }
 
-    // Состояние приложения
-    let currentTicketNum = 1;
-    let currentTicket = allTickets[String(currentTicketNum)];
-    let currentIndex = 0;
-    let correctCount = 0;
-    let incorrectCount = 0;
+    // Состояние игры
+    var currentTicketNum = 1;
+    var currentTicket = allTickets[String(currentTicketNum)];
+    var currentIndex = 0;
+    var correctCount = 0;
+    var incorrectCount = 0;
 
-    // Проверяем первый билет
     if (!currentTicket) {
-        throw new Error(`Билет под номером '${currentTicketNum}' не найден в объекте allTickets.`);
+        document.getElementById("question-text").style.color = "#ff3b30";
+        document.getElementById("question-text").innerHTML = "<b>Ошибка данных:</b> Билет №1 не найден внутри переменной allTickets.";
+        return;
     }
 
-    // Элементы страницы
-    const quizContainer = document.getElementById("quiz-container");
-    const resultContainer = document.getElementById("result-container");
-    const ticketInfo = document.getElementById("ticket-info");
-    const questionText = document.getElementById("question-text");
-    const questionImg = document.getElementById("question-img");
-    const optionsContainer = document.getElementById("options-container");
-    const correctStat = document.getElementById("correct-stat");
-    const incorrectStat = document.getElementById("incorrect-stat");
-    const nextTicketBtn = document.getElementById("next-ticket-btn");
+    // DOM-элементы
+    var quizContainer = document.getElementById("quiz-container");
+    var resultContainer = document.getElementById("result-container");
+    var ticketInfo = document.getElementById("ticket-info");
+    var questionText = document.getElementById("question-text");
+    var questionImg = document.getElementById("question-img");
+    var optionsContainer = document.getElementById("options-container");
+    var correctStat = document.getElementById("correct-stat");
+    var incorrectStat = document.getElementById("incorrect-stat");
+    var nextTicketBtn = document.getElementById("next-ticket-btn");
 
     function showQuestion() {
-        try {
-            if (!currentTicket) {
-                alert("Barcha biletlar tugadi! Test boshidan boshlanadi.");
-                currentTicketNum = 1;
-                currentTicket = allTickets["1"];
-                resetCounters();
-            }
-
-            quizContainer.style.display = "block";
-            resultContainer.style.display = "none";
-
-            const q = currentTicket[currentIndex];
-            if (!q) {
-                throw new Error(`Вопрос по индексу ${currentIndex} отсутствует в билете ${currentTicketNum}`);
-            }
-            
-            if (ticketInfo) {
-                ticketInfo.innerText = `${currentTicketNum}-Bilet | Savol: ${currentIndex + 1}/${currentTicket.length}`;
-            }
-            
-            questionText.innerText = q.question;
-
-            // Картинка
-            if (q.image && q.image !== "no_image" && q.image !== "") {
-                questionImg.src = q.image;
-                questionImg.style.display = "block";
-            } else {
-                questionImg.style.display = "none";
-                questionImg.src = "";
-            }
-
-            // Ответы
-            optionsContainer.innerHTML = "";
-            q.options.forEach((opt, index) => {
-                const btn = document.createElement("button");
-                btn.className = "btn";
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index, q.answer, btn);
-                optionsContainer.appendChild(btn);
-            });
-        } catch (e) {
-            questionText.innerHTML = `<span style="color: #ff3b30;">Ошибка внутри showQuestion:<br>${e.message}</span>`;
+        if (!currentTicket) {
+            alert("Barcha biletlar tugadi! Test boshidan boshlanadi.");
+            currentTicketNum = 1;
+            currentTicket = allTickets["1"];
+            resetCounters();
         }
+
+        quizContainer.style.display = "block";
+        resultContainer.style.display = "none";
+
+        var q = currentTicket[currentIndex];
+        if (!q) {
+            questionText.innerHTML = "Ошибка: Вопрос не найден.";
+            return;
+        }
+        
+        if (ticketInfo) {
+            ticketInfo.innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1) + "/" + currentTicket.length;
+        }
+        
+        questionText.innerText = q.question;
+
+        // Обработка картинок
+        if (q.image && q.image !== "no_image" && q.image !== "") {
+            questionImg.src = q.image;
+            questionImg.style.display = "block";
+        } else {
+            questionImg.style.display = "none";
+            questionImg.src = "";
+        }
+
+        // Рендеринг кнопок
+        optionsContainer.innerHTML = "";
+        q.options.forEach(function(opt, index) {
+            var btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = function() { checkAnswer(index, q.answer, btn); };
+            optionsContainer.appendChild(btn);
+        });
     }
 
     function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
-        const buttons = optionsContainer.querySelectorAll(".btn");
-        buttons.forEach(b => b.disabled = true);
+        var buttons = optionsContainer.querySelectorAll(".btn");
+        buttons.forEach(function(b) { b.disabled = true; });
 
         if (selectedIndex === correctAnswerIndex) {
             btnElement.style.backgroundColor = "#34c759";
@@ -115,12 +109,12 @@ try {
     function showResultsView() {
         quizContainer.style.display = "none";
         resultContainer.style.display = "block";
-        if (correctStat) correctStat.innerText = `To'g'ri javoblar: ${correctCount}`;
-        if (incorrectStat) incorrectStat.innerText = `Noto'g'ri javoblar: ${incorrectCount}`;
+        if (correctStat) correctStat.innerText = "To'g'ri javoblar: " + correctCount;
+        if (incorrectStat) incorrectStat.innerText = "Noto'g'ri javoblar: " + incorrectCount;
     }
 
     if (nextTicketBtn) {
-        nextTicketBtn.onclick = () => {
+        nextTicketBtn.onclick = function() {
             currentTicketNum++;
             if (allTickets[String(currentTicketNum)]) {
                 currentTicket = allTickets[String(currentTicketNum)];
@@ -142,9 +136,6 @@ try {
         incorrectCount = 0;
     }
 
-    // Старт
+    // Официальный старт программы
     showQuestion();
-
-} catch (globalError) {
-    document.getElementById("question-text").innerHTML = `<span style="color: #ff3b30;">Критическая ошибка инициализации:<br>${globalError.message}</span>`;
-}
+})();
