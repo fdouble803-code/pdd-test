@@ -56,7 +56,7 @@ if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
 
         if (selectedIndex === correctAnswerIndex) {
             // Если ответ правильный -> делаем кнопку зеленой
-            btnElement.style.backgroundColor = "#34c759"; // Нативный зеленый цвет Telegram
+            btnElement.style.backgroundColor = "#34c759"; // Зеленый цвет Telegram
             
             setTimeout(() => {
                 currentIndex++;
@@ -67,18 +67,18 @@ if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
                         location.reload(); // Перезагружаем страницу для нового случайного билета
                     });
                 }
-            }, 600); // Задержка 0.6 секунды, чтобы пользователь успел увидеть зеленый цвет
+            }, 600); // Задержка 0.6 секунды
 
         } else {
             // Если ответ неверный -> делаем нажатую кнопку красной
-            btnElement.style.backgroundColor = "#ff3b30"; // Нативный красный цвет Telegram
+            btnElement.style.backgroundColor = "#ff3b30"; // Красный цвет Telegram
             
             // Подсвечиваем правильный вариант зеленым, чтобы показать верный ответ
             buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
 
             setTimeout(() => {
                 tg.showAlert("Noto'g'ri javob, qayta urinib ko'ring!", () => {
-                    // После закрытия предупреждения возвращаем кнопкам исходный вид и разблокируем их
+                    // Возвращаем кнопкам исходный вид и разблокируем их
                     buttons.forEach(b => {
                         b.disabled = false;
                         b.style.backgroundColor = "#2c2c2e";
