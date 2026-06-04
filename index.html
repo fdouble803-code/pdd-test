@@ -2,55 +2,35 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ПДД Тест</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PDD Test</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <link rel="stylesheet" href="style.css">
-
-    <script>
-        window.onerror = function(message, source, lineno) {
-            var errDiv = document.getElementById("menu-title");
-            if (errDiv) {
-                errDiv.style.color = "#ff3b30";
-                errDiv.innerHTML = "<b>Xato:</b><br>" + message;
-            }
-            return false;
-        };
-        function handleScriptError(scriptName) {
-            var errDiv = document.getElementById("menu-title");
-            if (errDiv) {
-                errDiv.style.color = "#ff3b30";
-                errDiv.innerHTML = "<b>Файл topilmadi:</b> " + scriptName;
-            }
-        }
-    </script>
 </head>
 <body>
 
-    <div id="menu-container">
-        <div id="menu-title">Biletni tanlang</div>
-        <div id="tickets-grid">
-            </div>
+    <div id="app">
+        <div id="menu-container">
+            <h1 id="menu-title">Biletni tanlang</h1>
+            <div id="tickets-grid"></div>
+        </div>
+
+        <div id="quiz-container" style="display:none;">
+            <div id="ticket-info"></div>
+            <div id="question-text"></div>
+            <img id="question-img" src="" style="display:none;">
+            <div id="options-container"></div>
+        </div>
+
+        <div id="result-container" style="display:none;">
+            <h2>Natija</h2>
+            <div id="correct-stat"></div>
+            <div id="incorrect-stat"></div>
+            <button onclick="location.reload()">Bosh menyu</button>
+        </div>
     </div>
 
-    <div id="quiz-container">
-        <div id="ticket-info">Yuklanmoqda...</div>
-        <div id="question-text">Savol yuklanmoqda...</div>
-        <img id="question-img" src="" alt="Rasm">
-        <div id="options-container"></div>
-    </div>
-
-    <div id="result-container">
-        <div id="result-title">Bilet yakunlandi!</div>
-        <div class="stat-box stat-correct" id="correct-stat">To'g'ri: 0</div>
-        <div class="stat-box stat-incorrect" id="incorrect-stat">Noto'g'ri: 0</div>
-        
-        <button id="next-ticket-btn" class="btn">Keyingi bilet →</button>
-        <button id="home-btn" class="btn">🏠 Bosh menyu</button>
-    </div>
-
-    <script src="data.js" onerror="handleScriptError('data.js')"></script>
-    <script src="script.js" onerror="handleScriptError('script.js')"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
