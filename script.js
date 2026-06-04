@@ -2,13 +2,13 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// Проверка безопасности: загрузились ли билеты из allTickets.js?
+// Проверка безопасности: загрузились ли билеты из файла data.js?
 if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
-    document.getElementById("question-text").innerText = "Xatolik: allTickets.js fayli topilmadi yoki yuklanmadi!";
-    console.error("Переменная allTickets не найдена. Проверьте подключение allTickets.js в index.html");
+    document.getElementById("question-text").innerText = "Xatolik: data.js fayli topilmadi yoki yuklanmadi!";
+    console.error("Переменная allTickets не найдена. Проверьте, что файл data.js находится в той же папке и подключен правильно.");
 } else {
     
-    // 2. Выбираем случайный билет
+    // 2. Выбираем случайный билет из объекта allTickets
     const ticketNumbers = Object.keys(allTickets);
     const randomTicketKey = ticketNumbers[Math.floor(Math.random() * ticketNumbers.length)];
     const currentTicket = allTickets[randomTicketKey];
@@ -50,7 +50,7 @@ if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
 
     // 5. Функция проверки ответа
     function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
-        // Блокируем все кнопки, чтобы пользователь не кликал много раз во время анимации
+        // Блокируем все кнопки, чтобы пользователь не спамил кликами во время анимации
         const buttons = optionsContainer.querySelectorAll(".btn");
         buttons.forEach(b => b.disabled = true);
 
@@ -67,18 +67,18 @@ if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
                         location.reload(); // Перезагружаем страницу для нового случайного билета
                     });
                 }
-            }, 600); // 0.6 секунды задержки, чтобы увидеть зеленый цвет
+            }, 600); // Задержка 0.6 секунды, чтобы пользователь успел увидеть зеленый цвет
 
         } else {
-            // Если ответ неверный -> делаем кнопку красной
+            // Если ответ неверный -> делаем нажатую кнопку красной
             btnElement.style.backgroundColor = "#ff3b30"; // Нативный красный цвет Telegram
             
-            // Подсвечиваем правильный вариант зеленым, чтобы пользователь знал верный ответ
+            // Подсвечиваем правильный вариант зеленым, чтобы показать верный ответ
             buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
 
             setTimeout(() => {
                 tg.showAlert("Noto'g'ri javob, qayta urinib ko'ring!", () => {
-                    // После закрытия алерта возвращаем кнопкам исходный вид и разблокируем их
+                    // После закрытия предупреждения возвращаем кнопкам исходный вид и разблокируем их
                     buttons.forEach(b => {
                         b.disabled = false;
                         b.style.backgroundColor = "#2c2c2e";
