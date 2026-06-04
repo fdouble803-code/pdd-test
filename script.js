@@ -2,8 +2,8 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// 2. Выбираем случайный билет из всех доступных в allTickets
-const ticketNumbers = Object.keys(allTickets); // Получаем список всех номеров билетов [1, 2, 3...]
+// Убедитесь, что переменная allTickets (с вашим JSON из прошлого шага) подключена до этого кода!
+const ticketNumbers = Object.keys(allTickets); // Получаем список всех номеров билетов ["6", "7", "8"...]
 const randomTicketKey = ticketNumbers[Math.floor(Math.random() * ticketNumbers.length)];
 const currentTicket = allTickets[randomTicketKey]; // Загружаем вопросы именно этого билета
 
@@ -23,6 +23,7 @@ function showQuestion() {
 
     // Работа с картинкой (проверка наличия)
     if (q.image && q.image !== "no_image" && q.image !== "") {
+        // Замените путь, если картинки лежат в отдельной папке, например: src = `images/${q.image}`
         questionImg.src = q.image;
         questionImg.style.display = "block";
     } else {
@@ -36,28 +37,37 @@ function showQuestion() {
         btn.className = "btn";
         btn.innerText = opt;
         // Передаем правильный индекс ответа из данных
-        btn.onclick = () => checkAnswer(index, q.answer); 
+        btn.onclick = () => checkAnswer(index, q.answer, btn); 
         optionsContainer.appendChild(btn);
     });
 }
 
 // 5. Функция проверки ответа
-function checkAnswer(selectedIndex, correctAnswerIndex) {
+function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
     if (selectedIndex === correctAnswerIndex) {
-        // Правильный ответ -> идем дальше
-        currentIndex++;
-        if (currentIndex < currentTicket.length) {
-            showQuestion();
-        } else {
-            alert("Tabriklaymiz! Bilet tugadi!");
-            // Можно перезапустить случайный билет или закрыть
-            location.reload(); 
-        }
+        // Правильный ответ -> подсвечиваем зеленым (опционально) и идем дальше
+        btnElement.style.backgroundColor = "green";
+        
+        // Небольшая задержка перед следующим вопросом, чтобы пользователь увидел правильный ответ
+        setTimeout(() => {
+            currentIndex++;
+            if (currentIndex < currentTicket.length) {
+                showQuestion();
+            } else {
+                // Используем нативное окно Telegram вместо обычного alert
+                tg.showAlert("Tabriklaymiz! Bilet tugadi!", () => {
+                    location.reload(); // Перезапуск после закрытия окна
+                });
+            }
+        }, 500); // 500 миллисекунд задержки
+
     } else {
         // Неправильный ответ
-        alert("Noto'g'ri javob, qayta urinib ko'ring!");
+        btnElement.style.backgroundColor = "red";
+        tg.showAlert("Noto'g'ri javob, qayta urinib ko'ring!");
     }
 }
 
-// 6. Запуск теста
+// 6. ВАЖНО: ЗАПУСК ПЕРВОГО ВОПРОСА
+// Именно эта строчка запускает процесс при открытии приложения
 showQuestion();
