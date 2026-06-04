@@ -1,134 +1,175 @@
-/* БАЗОВЫЕ НАСТРОЙКИ И АДАПТАЦИЯ ПОД ТЕМУ TELEGRAM */
-body {
-    /* Используем цвета из темы Telegram, а если их нет — ставим темный фон по умолчанию */
-    background-color: var(--tg-theme-bg-color, #1c1c1e);
-    color: var(--tg-theme-text-color, #ffffff);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 20px;
-    text-align: center;
-    -webkit-user-select: none; /* Запрещаем выделять текст как на сайтах */
-    user-select: none;
-    margin: 0;
-}
+(function() {
+    // Безопасное получение Telegram WebApp
+    var tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg && typeof tg.expand === 'function') {
+        tg.expand();
+    }
 
-/* ЭКРАН МЕНЮ */
-#menu-container { 
-    display: block; 
-    padding: 10px; 
-}
-#menu-title { 
-    font-size: 26px; 
-    font-weight: 800; 
-    margin-bottom: 25px; 
-    letter-spacing: 0.5px;
-}
+    // Проверяем существование базы данных
+    if (typeof allTickets === 'undefined') {
+        document.getElementById("menu-title").style.color = "#ff3b30";
+        document.getElementById("menu-title").innerHTML = "Xatolik: data.js fayli topilmadi!";
+        return;
+    }
 
-#tickets-grid { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); /* 4 билета в ряд */
-    gap: 15px; 
-    margin-top: 20px; 
-}
+    // Состояние игры
+    var currentTicketNum = null;
+    var currentTicket = null;
+    var currentIndex = 0;
+    var correctCount = 0;
+    var incorrectCount = 0;
 
-/* КНОПКИ БИЛЕТОВ (ПЛИТКИ) */
-.ticket-btn { 
-    background: linear-gradient(145deg, #2a2a2c, #323234); /* Легкий объемный градиент */
-    color: #ffffff; 
-    border: none; 
-    border-radius: 16px; /* Более круглые углы */
-    padding: 22px 0; 
-    font-size: 22px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Мягкая тень */
-    transition: transform 0.1s ease, box-shadow 0.1s ease; 
-}
-.ticket-btn:active { 
-    transform: scale(0.92); /* Прикольный эффект вдавливания при клике */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
+    // DOM-элементы
+    var menuContainer = document.getElementById("menu-container");
+    var ticketsGrid = document.getElementById("tickets-grid");
+    
+    var quizContainer = document.getElementById("quiz-container");
+    var resultContainer = document.getElementById("result-container");
+    
+    var ticketInfo = document.getElementById("ticket-info");
+    var questionText = document.getElementById("question-text");
+    var questionImg = document.getElementById("question-img");
+    var optionsContainer = document.getElementById("options-container");
+    
+    var correctStat = document.getElementById("correct-stat");
+    var incorrectStat = document.getElementById("incorrect-stat");
+    
+    var nextTicketBtn = document.getElementById("next-ticket-btn");
+    var homeBtn = document.getElementById("home-btn");
 
-/* ЭКРАН ТЕСТА */
-#quiz-container { display: none; }
+    // 1. ФУНКЦИЯ ПОКАЗА ГЛАВНОГО МЕНЮ
+    function showMenu() {
+        menuContainer.style.display = "block";
+        quizContainer.style.display = "none";
+        resultContainer.style.display = "none";
+        
+        // Очищаем старые кнопки
+        ticketsGrid.innerHTML = "";
+        
+        // Получаем все номера билетов из data.js и сортируем их по порядку (1, 2, 3...)
+        var ticketKeys = Object.keys(allTickets).sort(function(a, b) {
+            return parseInt(a) - parseInt(b);
+        });
 
-#ticket-info { 
-    font-size: 14px; 
-    color: var(--tg-theme-hint-color, #8e8e93); 
-    margin-bottom: 15px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px;
-}
+        // Создаем кнопку для каждого билета
+        ticketKeys.forEach(function(key) {
+            var btn = document.createElement("button");
+            btn.className = "ticket-btn";
+            btn.innerText = key;
+            btn.onclick = function() {
+                startTicket(key); // Запуск билета по клику
+            };
+            ticketsGrid.appendChild(btn);
+        });
+    }
 
-#question-text { 
-    font-size: 22px; 
-    font-weight: 700; 
-    margin-bottom: 25px; 
-    line-height: 1.4; 
-}
+    // 2. ФУНКЦИЯ ЗАПУСКА ВЫБРАННОГО БИЛЕТА
+    function startTicket(ticketId) {
+        currentTicketNum = parseInt(ticketId);
+        currentTicket = allTickets[String(currentTicketNum)];
+        
+        if (!currentTicket) return;
 
-#question-img { 
-    max-width: 100%; 
-    max-height: 250px; 
-    height: auto; 
-    border-radius: 16px; 
-    margin: 15px auto; 
-    display: none; 
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25); /* Тень для картинки */
-}
+        resetCounters();
+        menuContainer.style.display = "none";
+        resultContainer.style.display = "none";
+        quizContainer.style.display = "block";
+        
+        showQuestion();
+    }
 
-/* КНОПКИ ОТВЕТОВ */
-.btn { 
-    display: block; 
-    width: 100%; 
-    margin: 12px 0; 
-    padding: 18px; 
-    background-color: var(--tg-theme-secondary-bg-color, #2c2c2e); 
-    color: var(--tg-theme-text-color, #ffffff); 
-    border: none; 
-    border-radius: 16px; 
-    font-size: 16px; 
-    cursor: pointer; 
-    font-weight: 600; 
-    text-align: center;
-    transition: all 0.2s ease;
-}
-.btn:active { transform: scale(0.97); }
-.btn:disabled { opacity: 1; cursor: default; }
+    // 3. ФУНКЦИЯ ПОКАЗА ВОПРОСА
+    function showQuestion() {
+        var q = currentTicket[currentIndex];
+        
+        if (ticketInfo) {
+            ticketInfo.innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1) + "/" + currentTicket.length;
+        }
+        
+        questionText.innerText = q.question;
 
-/* ЭКРАН РЕЗУЛЬТАТОВ */
-#result-container { display: none; padding: 30px 10px; }
-#result-title { font-size: 28px; font-weight: 800; margin-bottom: 30px; }
+        // Обработка картинок
+        if (q.image && q.image !== "no_image" && q.image !== "") {
+            questionImg.src = q.image;
+            questionImg.style.display = "block";
+        } else {
+            questionImg.style.display = "none";
+            questionImg.src = "";
+        }
 
-/* КРАСИВАЯ СТАТИСТИКА */
-.stat-box { 
-    font-size: 20px; 
-    margin: 15px 0; 
-    padding: 20px; 
-    border-radius: 16px; 
-    font-weight: bold; 
-}
-.stat-correct { 
-    background-color: rgba(52, 199, 89, 0.15); 
-    color: #34c759; 
-    border: 1px solid rgba(52, 199, 89, 0.3); /* Легкая обводка */
-}
-.stat-incorrect { 
-    background-color: rgba(255, 59, 48, 0.15); 
-    color: #ff3b30; 
-    border: 1px solid rgba(255, 59, 48, 0.3);
-}
+        // Рендеринг кнопок ответов
+        optionsContainer.innerHTML = "";
+        q.options.forEach(function(opt, index) {
+            var btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = function() { checkAnswer(index, q.answer, btn); };
+            optionsContainer.appendChild(btn);
+        });
+    }
 
-/* КНОПКИ В КОНЦЕ БИЛЕТА */
-#next-ticket-btn { 
-    background-color: var(--tg-theme-button-color, #007aff); /* Нативный цвет кнопок Telegram */
-    color: var(--tg-theme-button-text-color, #ffffff); 
-    margin-top: 40px; 
-    font-size: 18px;
-}
-#home-btn { 
-    background-color: #ff9500; 
-    color: white; 
-    margin-top: 15px; 
-    font-size: 18px;
-}
+    // 4. ФУНКЦИЯ ПРОВЕРКИ ОТВЕТА
+    function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
+        var buttons = optionsContainer.querySelectorAll(".btn");
+        buttons.forEach(function(b) { b.disabled = true; });
+
+        if (selectedIndex === correctAnswerIndex) {
+            btnElement.style.backgroundColor = "#34c759";
+            correctCount++;
+            setTimeout(goToNext, 600);
+        } else {
+            btnElement.style.backgroundColor = "#ff3b30";
+            if (buttons[correctAnswerIndex]) {
+                buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
+            }
+            incorrectCount++;
+            setTimeout(goToNext, 1500);
+        }
+    }
+
+    // Переход к следующему вопросу или результатам
+    function goToNext() {
+        currentIndex++;
+        if (currentIndex < currentTicket.length) {
+            showQuestion();
+        } else {
+            showResultsView();
+        }
+    }
+
+    // 5. ЭКРАН РЕЗУЛЬТАТОВ
+    function showResultsView() {
+        quizContainer.style.display = "none";
+        resultContainer.style.display = "block";
+        if (correctStat) correctStat.innerText = "To'g'ri javoblar: " + correctCount;
+        if (incorrectStat) incorrectStat.innerText = "Noto'g'ri javoblar: " + incorrectCount;
+    }
+
+    // 6. ОБРАБОТЧИКИ КНОПОК В РЕЗУЛЬТАТАХ
+    if (nextTicketBtn) {
+        nextTicketBtn.onclick = function() {
+            var nextNum = currentTicketNum + 1;
+            if (allTickets[String(nextNum)]) {
+                startTicket(nextNum);
+            } else {
+                alert("Siz oxirgi biletni yechdingiz! Bosh menyuga qaytamiz.");
+                showMenu();
+            }
+        };
+    }
+
+    if (homeBtn) {
+        homeBtn.onclick = function() {
+            showMenu();
+        };
+    }
+
+    function resetCounters() {
+        currentIndex = 0;
+        correctCount = 0;
+        incorrectCount = 0;
+    }
+
+    // СТАРТ ПРОГРАММЫ: Показываем главное меню вместо 1 вопроса
+    showMenu();
+})();
