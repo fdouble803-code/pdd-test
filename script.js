@@ -1,30 +1,39 @@
 // 1. Инициализация Telegram Web App
 const tg = window.Telegram.WebApp;
-tg.expand();
+if (tg) {
+    tg.expand();
+}
 
-// Проверка безопасности: загрузились ли билеты из файла data.js?
-if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
-    document.getElementById("question-text").innerText = "Xatolik: data.js fayli topilmadi yoki yuklanmadi!";
-    console.error("Переменная allTickets не найдена. Проверьте, что файл data.js находится в той же папке и подключен правильно.");
+// Безопасная функция для вызова алертов (работает и на ПК, и в TG)
+function safeAlert(message, callback) {
+    if (tg && tg.showAlert) {
+        tg.showAlert(message, callback);
+    } else {
+        alert(message);
+        if (callback) callback();
+    }
+}
+
+// Проверка загрузки базы данных
+if (typeof allTickets === 'undefined' || !allTickets["1"]) {
+    document.getElementById("question-text").innerText = "Xatolik: data.js yuklanmadi yoki 1-bilet topilmadi!";
+    console.error("Переменная allTickets или билет '1' не найдены в файле data.js");
 } else {
     
-    // 2. Выбираем случайный билет из объекта allTickets
-    const ticketNumbers = Object.keys(allTickets);
-    const randomTicketKey = ticketNumbers[Math.floor(Math.random() * ticketNumbers.length)];
-    const currentTicket = allTickets[randomTicketKey];
+    // ФИКС 1: Строго загружаем первый билет (а не случайный)
+    const currentTicket = allTickets["1"]; 
+    let currentIndex = 0; // Индекс текущего вопроса
 
-    let currentIndex = 0; // Индекс текущего вопроса в билете
-
-    // 3. Получаем элементы страницы
+    // Получаем элементы страницы
     const questionText = document.getElementById("question-text");
     const questionImg = document.getElementById("question-img");
     const optionsContainer = document.getElementById("options-container");
 
-    // 4. Функция отображения вопроса
+    // Функция отображения вопроса
     function showQuestion() {
         const q = currentTicket[currentIndex];
         
-        // Отображаем текст вопроса
+        // Устанавливаем текст вопроса
         questionText.innerText = `${currentIndex + 1}. ${q.question}`;
 
         // Работа с картинкой
@@ -33,61 +42,68 @@ if (typeof allTickets === 'undefined' || Object.keys(allTickets).length === 0) {
             questionImg.style.display = "block";
         } else {
             questionImg.style.display = "none";
+            questionImg.src = "";
         }
 
-        // Очищаем контейнер и создаем кнопки ответов
+        // Очищаем старые кнопки и создаем новые
         optionsContainer.innerHTML = "";
         q.options.forEach((opt, index) => {
             const btn = document.createElement("button");
             btn.className = "btn";
             btn.innerText = opt;
             
-            // Обработчик клика
+            // Обработчик нажатия
             btn.onclick = () => checkAnswer(index, q.answer, btn); 
             optionsContainer.appendChild(btn);
         });
     }
 
-    // 5. Функция проверки ответа
+    // ФИКС 2: Функция проверки ответа с автоматическим переходом
     function checkAnswer(selectedIndex, correctAnswerIndex, btnElement) {
-        // Блокируем все кнопки, чтобы пользователь не спамил кликами во время анимации
+        // Блокируем все кнопки от повторных нажатий
         const buttons = optionsContainer.querySelectorAll(".btn");
         buttons.forEach(b => b.disabled = true);
 
         if (selectedIndex === correctAnswerIndex) {
-            // Если ответ правильный -> делаем кнопку зеленой
-            btnElement.style.backgroundColor = "#34c759"; // Зеленый цвет Telegram
+            // Если ответ ПРАВИЛЬНЫЙ: красим кнопку в зеленый
+            btnElement.style.backgroundColor = "#34c759"; 
             
+            // Через 0.6 секунды переходим дальше
             setTimeout(() => {
-                currentIndex++;
-                if (currentIndex < currentTicket.length) {
-                    showQuestion();
-                } else {
-                    tg.showAlert("Tabriklaymiz! Bilet tugadi!", () => {
-                        location.reload(); // Перезагружаем страницу для нового случайного билета
-                    });
-                }
-            }, 600); // Задержка 0.6 секунды
+                goToNextQuestion();
+            }, 600);
 
         } else {
-            // Если ответ неверный -> делаем нажатую кнопку красной
-            btnElement.style.backgroundColor = "#ff3b30"; // Красный цвет Telegram
+            // Если ответ НЕПРАВИЛЬНЫЙ: красим нажатую в красный
+            btnElement.style.backgroundColor = "#ff3b30"; 
             
-            // Подсвечиваем правильный вариант зеленым, чтобы показать верный ответ
-            buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
+            // И СРАЗУ подсвечиваем правильную кнопку зеленым (подсказка)
+            if (buttons[correctAnswerIndex]) {
+                buttons[correctAnswerIndex].style.backgroundColor = "#34c759";
+            }
 
+            // Даем пользователю 1.5 секунды посмотреть на правильный ответ и переводим дальше
             setTimeout(() => {
-                tg.showAlert("Noto'g'ri javob, qayta urinib ko'ring!", () => {
-                    // Возвращаем кнопкам исходный вид и разблокируем их
-                    buttons.forEach(b => {
-                        b.disabled = false;
-                        b.style.backgroundColor = "#2c2c2e";
-                    });
-                });
-            }, 400);
+                goToNextQuestion();
+            }, 1500);
         }
     }
 
-    // 6. Запускаем первый вопрос при загрузке приложения!
+    // Вспомогательная функция переключения шага
+    function goToNextQuestion() {
+        currentIndex++;
+        
+        if (currentIndex < currentTicket.length) {
+            // Если вопросы еще есть — показываем следующий
+            showQuestion();
+        } else {
+            // Если билет закончился — выдаем финальное поздравление
+            safeAlert("Tabriklaymiz! 1-bilet muvaffaqiyatli tugadi!", () => {
+                location.reload(); // Перезапуск билета сначала
+            });
+        }
+    }
+
+    // Запуск самого первого вопроса
     showQuestion();
 }
