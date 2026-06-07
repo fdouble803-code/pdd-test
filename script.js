@@ -82,7 +82,7 @@ const allTickets = {
         correctCount = 0;
         incorrectCount = 0;
 
-        initTabs(); // Active klassni yangilash uchun
+        initTabs(); 
         startTimer();
         renderQuestion();
         updateSidebar();
@@ -91,7 +91,6 @@ const allTickets = {
     // Taymerni ishga tushirish (20 daqiqa)
     function startTimer() {
         var timeLeft = 1200; 
-        // Agar html ichida maxsus taymer divi bo'lsa yangilaydi
         var timerDisplay = document.getElementById("timer");
         clearInterval(timerInterval);
         
@@ -106,4 +105,78 @@ const allTickets = {
                 clearInterval(timerInterval); 
                 alert("Vaqtingiz tugadi!");
             }
-        }, 1
+        }, 1000);
+    }
+
+    // Savolni markaziy kartaga chiqarish
+    function renderQuestion() {
+        var ticket = allTickets[currentTicketNum];
+        if (!ticket || !ticket[currentIndex]) return;
+
+        var q = ticket[currentIndex];
+        
+        // Savol matni va sarlavhasi
+        questionTextBox.innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1) + "\n\n" + q.question;
+        
+        // Rasm tekshiruvi (no_image bo'lsa butunlay yashiriladi)
+        questionImageBox.innerHTML = "";
+        if (q.image && q.image !== "no_image") {
+            questionImageBox.style.display = "block";
+            var img = document.createElement("img");
+            img.src = q.image;
+            img.alt = "Savol " + q.id;
+            questionImageBox.appendChild(img);
+        } else {
+            questionImageBox.style.display = "none";
+        }
+
+        // Variantlar ro'yxati
+        questionOptionsBox.innerHTML = "";
+        q.options.forEach((opt, idx) => {
+            var btn = document.createElement("button");
+            btn.className = "option-item";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx, q.answer, btn);
+            questionOptionsBox.appendChild(btn);
+        });
+    }
+
+    // Javobni tekshirish (Xatoliklar to'liq tuzatildi)
+    function checkAnswer(selectedIndex, correctAnswerIndex, clickedBtn) {
+        var buttons = questionOptionsBox.querySelectorAll(".option-item");
+        buttons.forEach(b => b.disabled = true); // Variantlarni bloklash
+
+        if (selectedIndex === correctAnswerIndex) {
+            clickedBtn.style.background = "#10b981"; // Yashil (To'g'ri)
+            clickedBtn.style.borderColor = "#10b981";
+            correctCount++;
+            setTimeout(goToNext, 500);
+        } else {
+            clickedBtn.style.background = "#ef4444"; // Qizil (Noto'g'ri)
+            clickedBtn.style.borderColor = "#ef4444";
+            
+            // To'g'ri javobni ham yashil qilib ko'rsatish
+            if (buttons[correctAnswerIndex]) {
+                buttons[correctAnswerIndex].style.background = "#10b981";
+                buttons[correctAnswerIndex].style.borderColor = "#10b981";
+            }
+            incorrectCount++;
+            setTimeout(goToNext, 1200);
+        }
+    }
+
+    // Keyingi savolga o'tish
+    function goToNext() {
+        var ticket = allTickets[currentTicketNum];
+        currentIndex++;
+        if (currentIndex < ticket.length) {
+            renderQuestion();
+            updateSidebar();
+        } else {
+            clearInterval(timerInterval);
+            alert("Bilet tugadi!\nTo'g'ri javoblar: " + correctCount + "\nNoto'g'ri javoblar: " + incorrectCount);
+        }
+    }
+
+    // Ilovani birinchi marta ishga tushirish
+    init
