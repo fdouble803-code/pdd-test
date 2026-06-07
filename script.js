@@ -1,103 +1,51 @@
-(function() {
-    var tg = window.Telegram ? window.Telegram.WebApp : null;
-    if (tg) tg.expand();
+// Test bazasi (barcha biletlar shu yerda bo'ladi)
+const allTickets = {
+    "1": [
+        { "ticket": 1, "id": 1, "question": "Avtomobil qaysi yo'nalishlarda harakatlanishi mumkin?", "image": "no_image", "options": ["Faqat o'ngga", "To'xtash va svetoforning yashil chirog'ini kutish", "Faqat to'g'riga", "Barcha yo'nalishlar bo'yicha"], "answer": 3 },
+        { "ticket": 1, "id": 2, "question": "Svetaforning yashil miltillovchi ishorasi nimani bildiradi?", "image": "1.2.png", "options": ["Svetafor nosozligini", "Harakatga ruxsat beradi va tez orada taqiqlovchi ishora yonishi to'g'risida axborot beradi", "Harakatni davom ettirishni taqiqlaydi"], "answer": 1 },
+        // ... qolgan 18 ta savolni shu yerga qo'shib borasan
+    ],
+    "2": [
+        // 2-bilet savollari
+    ]
+};
 
-    var currentTicketNum = null, currentTicket = null, currentIndex = 0;
-    var correctCount = 0, incorrectCount = 0, timerInterval;
+let currentTicket = "1";
+let currentQuestionIndex = 0;
 
-    var menuContainer = document.getElementById("menu-container");
-    var quizContainer = document.getElementById("quiz-container");
-    var resultContainer = document.getElementById("result-container");
-    var ticketsGrid = document.getElementById("tickets-grid");
+function renderQuestion() {
+    const ticket = allTickets[currentTicket];
+    if (!ticket || !ticket[currentQuestionIndex]) return;
 
-    function showMenu() {
-        menuContainer.style.display = "block";
-        quizContainer.style.display = "none";
-        resultContainer.style.display = "none";
-        ticketsGrid.innerHTML = "";
-        
-        Object.keys(allTickets).sort((a,b) => a-b).forEach(key => {
-            var btn = document.createElement("button");
-            btn.className = "ticket-btn";
-            btn.innerText = key;
-            btn.onclick = () => startTicket(key);
-            ticketsGrid.appendChild(btn);
-        });
+    const q = ticket[currentQuestionIndex];
+    const container = document.getElementById('question-box');
+    const optionsBox = document.getElementById('options-box');
+
+    // Savol matni
+    container.innerHTML = `<h3>${q.question}</h3>`;
+
+    // Rasm tekshiruvi
+    if (q.image !== "no_image") {
+        container.innerHTML += `<img src="${q.image}" alt="Rasm" style="max-width:100%; border-radius:8px;">`;
     }
 
-    function startTicket(ticketId) {
-        currentTicketNum = parseInt(ticketId);
-        currentTicket = allTickets[String(currentTicketNum)];
-        currentIndex = 0; correctCount = 0; incorrectCount = 0;
-        
-        menuContainer.style.display = "none";
-        quizContainer.style.display = "block";
-        
-        startTimer();
-        showQuestion();
+    // Variantlar
+    optionsBox.innerHTML = q.options.map((opt, i) => `
+        <button class="option-btn" onclick="checkAnswer(${i}, ${q.answer})">
+            ${opt}
+        </button>
+    `).join('');
+}
+
+function checkAnswer(selectedIndex, correctAnswer) {
+    if (selectedIndex === correctAnswer) {
+        alert("To'g'ri!");
+        currentQuestionIndex++;
+        renderQuestion();
+    } else {
+        alert("Noto'g'ri, qayta urinib ko'ring.");
     }
+}
 
-    function startTimer() {
-        var timeLeft = 1200; // 20 daqiqa
-        var timerDisplay = document.getElementById("timer");
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            var m = Math.floor(timeLeft / 60);
-            var s = timeLeft % 60;
-            timerDisplay.innerText = "Vaqt: " + m + ":" + (s < 10 ? "0" : "") + s;
-            if (timeLeft <= 0) { clearInterval(timerInterval); showResults(); }
-        }, 1000);
-    }
-
-    function showQuestion() {
-        var q = currentTicket[currentIndex];
-        document.getElementById("ticket-info").innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1);
-        document.getElementById("question-text").innerText = q.question;
-        
-        var img = document.getElementById("question-img");
-        if (q.image && q.image !== "no_image") {
-            img.src = q.image; img.style.display = "block";
-        } else { img.style.display = "none"; }
-
-        var container = document.getElementById("options-container");
-        container.innerHTML = "";
-        q.options.forEach((opt, idx) => {
-            var btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, q.answer, btn);
-            container.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(idx, correctIdx, btn) {
-        var buttons = document.querySelectorAll(".btn");
-        buttons.forEach(b => b.disabled = true);
-        if (idx === correctIdx) {
-            btn.classList.add('correct'); correctCount++;
-            setTimeout(goToNext, 500);
-        } else {
-            btn.classList.add('wrong');
-            buttons[correctIdx].classList.add('correct');
-            incorrectCount++;
-            setTimeout(goToNext, 1200);
-        }
-    }
-
-    function goToNext() {
-        currentIndex++;
-        if (currentIndex < currentTicket.length) showQuestion();
-        else showResults();
-    }
-
-    function showResults() {
-        clearInterval(timerInterval);
-        quizContainer.style.display = "none";
-        resultContainer.style.display = "block";
-        document.getElementById("correct-stat").innerText = "To'g'ri: " + correctCount;
-        document.getElementById("incorrect-stat").innerText = "Noto'g'ri: " + incorrectCount;
-    }
-
-    showMenu();
-})();
+// Boshlang'ich yuklash
+document.addEventListener("DOMContentLoaded", renderQuestion);
