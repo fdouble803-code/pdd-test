@@ -1,4 +1,3 @@
-// Barcha biletlar va o'zbek tilidagi xatosiz savollar bazasi
 const allTickets = {
     "1": [
         { "ticket": 1, "id": 1, "question": "Svetaforning yashil miltillovchi ishorasi nimani bildiradi?", "image": "no_image", "options": ["Svetafor nosozligini", "Harakatga ruxsat beradi va tez orada taqiqlovchi ishora yonishi to'g'risida axborot beradi", "Harakatni davom ettirishni taqiqlaydi"], "answer": 1 },
@@ -12,7 +11,7 @@ const allTickets = {
         { "ticket": 1, "id": 9, "question": "Ushbu yo'l nechta harakatlanish bo'lagiga ega?", "image": "no_image", "options": ["Bitta harakatlanish bo'lagiga", "Ikkita harakatlanish bo'lagiga", "Uchta harakatlanish bo'lagiga"], "answer": 1 },
         { "ticket": 1, "id": 10, "question": "Yo'lda «TO'XTASh», yozuvi ko'rinishidagi yo'l chizig'i nimani bildiradi?", "image": "1.10.png", "options": ["Tartibga solingan chorrahada to'xtash chizig'iga yaqinlashayotganligi haqida ogohlantiradi", "To'xtash chizig'i va «To'xtamasdan harakatlanish taqiqlanadi» yo'l belgisi o'rnatilgan yo'l qismiga yaqinlashayotganligini bildiradi", "«Yo'l bering» yo'l belgisiga yaqinlashayotganligini bildiradi"], "answer": 1 },
         { "ticket": 1, "id": 11, "question": "Qaysi haydovchi to'xtab turish qoidasini buzdi?", "image": "no_image", "options": ["Mototsikl haydovchisi", "Trotuarda to'xtab turgan avtomobil haydovchisi", "Har ikkisi buzdi"], "answer": 2 },
-        { "ticket": 1, "id": 12, "question": "Turar job dahalarida qanday harakatlar taqiqlangan?", "image": "no_image", "options": ["Faqat o'quv mashg'ulotlarini bajarish", "Faqat dvigatel ishlab turganda to'xtab turish", "Barcha sanab o'tilgan hollarda"], "answer": 2 },
+        { "ticket": 1, "id": 12, "question": "Turar joy dahalarida qanday harakatlar taqiqlangan?", "image": "no_image", "options": ["Faqat o'quv mashg'ulotlarini bajarish", "Faqat dvigatel ishlab turganda to'xtab turish", "Barcha sanab o'tilgan hollarda"], "answer": 2 },
         { "ticket": 1, "id": 13, "question": "Transport vositalari qattiq ulagichda shatakka olinganda shatakka olgan va shatakka olingan transport vositalari orasidagi masofa qancha bo'lishi kerak?", "image": "no_image", "options": ["4 metrdan oshmasligi", "4 metrdan 6 metrgacha", "Qoidalarda belgilanmagan"], "answer": 0 },
         { "ticket": 1, "id": 14, "question": "Sanab o'tilgan qaysi holatda transport vositasidan foydalanishga ruxsat etiladi?", "image": "no_image", "options": ["Tashqi yoritgich asboblari ifloslangan bo'lsa", "Yorituvchi chiroq nurining yo'nalishi buzilgan bo'lsa", "Old qismida - oq yoki sariq rangli tumanga qarshi faralar o'rnatilgan bo'lsa"], "answer": 2 },
         { "ticket": 1, "id": 15, "question": "Yo'lning sirpanchiq qismida rul chambaragini keskin burganda hosil bo'ladigan sirpanishning oldini olish uchun haydovchi qanday ehtiyot choralarini ko'rishi kerak?", "image": "1.15.png", "options": ["Rul chambaragini zudlik bilan sirpanayotgan tomonga burish va tezda avtomobilni harakat yo'nalishini to'g'rilab olish", "Ilashmani uzish", "Tormoz tepkisini bosish"], "answer": 0 },
@@ -25,7 +24,6 @@ const allTickets = {
 };
 
 (function() {
-    // Telegram WebApp integratsiyasi
     var tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) tg.expand();
 
@@ -34,7 +32,6 @@ const allTickets = {
     var correctCount = 0, incorrectCount = 0;
     var timerInterval, timeLeft = 1200;
 
-    // DOM ob'ektlarini aniqlash
     var tabsContainer = document.getElementById("tickets-tabs-container");
     var numsContainer = document.getElementById("questions-nums-container");
     var questionTextBox = document.getElementById("question-text-box");
@@ -44,7 +41,6 @@ const allTickets = {
     var correctDisplay = document.getElementById("correct-display");
     var incorrectDisplay = document.getElementById("incorrect-display");
 
-    // 1-15 bilet tugmalarini yaratish
     function initTabs() {
         tabsContainer.innerHTML = "";
         for (let i = 1; i <= 15; i++) {
@@ -58,7 +54,6 @@ const allTickets = {
         }
     }
 
-    // Chap tarafdagi 1-20 tugmalarini yangilash
     function updateSidebar() {
         numsContainer.innerHTML = "";
         var ticket = allTickets[currentTicketNum] || [];
@@ -75,7 +70,6 @@ const allTickets = {
         });
     }
 
-    // Biletni o'zgartirish funksiyasi
     function switchTicket(ticketId) {
         if (!allTickets[ticketId]) {
             alert(ticketId + "-bilet ma'lumotlari hali kiritilmagan.");
@@ -85,10 +79,10 @@ const allTickets = {
         currentIndex = 0;
         correctCount = 0;
         incorrectCount = 0;
-        timeLeft = 1200; // Taymerni qayta tiklash
+        timeLeft = 1200;
 
-        correctDisplay.innerText = "To'g'ri: 0";
-        incorrectDisplay.innerText = "Noto'g'ri: 0";
+        if (correctDisplay) correctDisplay.innerText = "To'g'ri: 0";
+        if (incorrectDisplay) incorrectDisplay.innerText = "Noto'g'ri: 0";
 
         initTabs();
         startTimer();
@@ -96,7 +90,6 @@ const allTickets = {
         updateSidebar();
     }
 
-    // Taymer hisoblagichi (20 daqiqa)
     function startTimer() {
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
@@ -113,17 +106,13 @@ const allTickets = {
         }, 1000);
     }
 
-    // Savolni kartaga chiroyli chiqarish va rasmlarni tekshirish
     function renderQuestion() {
         var ticket = allTickets[currentTicketNum];
         if (!ticket || !ticket[currentIndex]) return;
 
         var q = ticket[currentIndex];
-        
-        // Savol matni
         questionTextBox.innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1) + "\n\n" + q.question;
         
-        // Rasm blokini boshqarish (no_image bo'lsa yashiriladi)
         questionImageBox.innerHTML = "";
         if (q.image && q.image !== "no_image") {
             questionImageBox.style.display = "block";
@@ -135,7 +124,6 @@ const allTickets = {
             questionImageBox.style.display = "none";
         }
 
-        // Javob variantlari tugmalarini yaratish
         questionOptionsBox.innerHTML = "";
         q.options.forEach((opt, idx) => {
             var btn = document.createElement("button");
@@ -146,36 +134,33 @@ const allTickets = {
         });
     }
 
-    // Javobni tekshirish va yashil/qizil ranglar bilan vizual effekt berish
     function checkAnswer(selectedIndex, correctAnswerIndex, clickedBtn) {
         var buttons = questionOptionsBox.querySelectorAll(".option-item");
-        buttons.forEach(b => b.disabled = true); // Qolgan tugmalarni vaqtincha bloklash
+        buttons.forEach(b => b.disabled = true);
 
         if (selectedIndex === correctAnswerIndex) {
-            clickedBtn.style.backgroundColor = "#10b981"; // To'g'ri (Yashil)
+            clickedBtn.style.backgroundColor = "#10b981";
             clickedBtn.style.borderColor = "#10b981";
             clickedBtn.style.color = "#ffffff";
             correctCount++;
-            correctDisplay.innerText = "To'g'ri: " + correctCount;
+            if (correctDisplay) correctDisplay.innerText = "To'g'ri: " + correctCount;
             setTimeout(goToNext, 500);
         } else {
-            clickedBtn.style.backgroundColor = "#ef4444"; // Noto'g'ri (Qizil)
+            clickedBtn.style.backgroundColor = "#ef4444";
             clickedBtn.style.borderColor = "#ef4444";
             clickedBtn.style.color = "#ffffff";
             
-            // To'g'ri javobni ham yashil qilib ochib berish
             if (buttons[correctAnswerIndex]) {
                 buttons[correctAnswerIndex].style.backgroundColor = "#10b981";
                 buttons[correctAnswerIndex].style.borderColor = "#10b981";
                 buttons[correctAnswerIndex].style.color = "#ffffff";
             }
             incorrectCount++;
-            incorrectDisplay.innerText = "Noto'g'ri: " + incorrectCount;
+            if (incorrectDisplay) incorrectDisplay.innerText = "Noto'g'ri: " + incorrectCount;
             setTimeout(goToNext, 1200);
         }
     }
 
-    // Keyingi savolga o'tish
     function goToNext() {
         var ticket = allTickets[currentTicketNum];
         currentIndex++;
@@ -188,7 +173,6 @@ const allTickets = {
         }
     }
 
-    // Sahifa yuklanganda tizimni avtomatik ishga tushirish
     initTabs();
     startTimer();
     renderQuestion();
