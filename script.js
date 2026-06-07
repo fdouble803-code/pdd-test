@@ -1,103 +1,109 @@
+// Barcha biletlar va o'zbek tilidagi to'g'ri savollar bazasi
+const allTickets = {
+    "1": [
+        { "ticket": 1, "id": 1, "question": "Svetaforning yashil miltillovchi ishorasi nimani bildiradi?", "image": "no_image", "options": ["Svetafor nosozligini", "Harakatga ruxsat beradi va tez orada taqiqlovchi ishora yonishi to'g'risida axborot beradi", "Harakatni davom ettirishni taqiqlaydi"], "answer": 1 },
+        { "ticket": 1, "id": 2, "question": "Ushbu joyda avtomobilni to'xtab turish uchun qo'yishga ruxsat etiladimi?", "image": "1.2.png", "options": ["Ha", "Yo'q"], "answer": 1 },
+        { "ticket": 1, "id": 3, "question": "Siz chorrahadan to'g'riga o'tmoqchisiz. Ushbu vaziyatda Sizning harakatingiz?", "image": "1.3.png", "options": ["Chorrahaga birinchi kirgan qizil avtomobilga yo'l berish", "Qizil avtomobil yo'l berayotganiga ishonch xosil qilib chorrahadan birinchi o'tish"], "answer": 1 },
+        { "ticket": 1, "id": 4, "question": "Siz chorrahadan chapga burilmoqchisiz. Ushbu vaziyatda kimga yo'l berasiz?", "image": "no_image", "options": ["Faqat avtobusga", "Faqat qizil avtomobilga", "Hech kimga"], "answer": 2 },
+        { "ticket": 1, "id": 5, "question": "Qaysi hollarda yo'lning harakatlanish bo'lagini ajratuvchi uzuq-uzuq chiziqni bosib o'tish mumkin?", "image": "1.5.png", "options": ["Faqat qayta tizilishda", "Yo'lda boshqa transport vositalari bo'lmasa", "Barcha sanab o'tilgan hollarda"], "answer": 0 },
+        { "ticket": 1, "id": 6, "question": "Ushbu ko'rsatilgan holatda mototsikl haydovchisi sizga yo'l berishi kerakmi?", "image": "no_image", "options": ["Yo'q", "Ha"], "answer": 1 },
+        { "ticket": 1, "id": 7, "question": "Sanab o'tilgan qaysi hollarda egiluvchan ulagichda shatakka olish taqiqlanadi?", "image": "1.7.png", "options": ["Faqat tog'li yo'llarda", "Yo'l yaxmalak, sirpanchiq bo'lgan hollarda", "Kunning qorong'i vaqtida va etarli ko'rinmaslik sharoitida", "Barcha sanab o'tilgan hollarda"], "answer": 1 },
+        { "ticket": 1, "id": 8, "question": "Ushbu belgilardan qaysi biri bir tomonlama harakat tashkil qilingan yo'lning boshida o'rnatiladi?", "image": "1.8.png", "options": ["Faqat A", "Faqat Б", "Б va Г", "Б yoki В"], "answer": 1 },
+        { "ticket": 1, "id": 9, "question": "Ushbu yo'l nechta harakatlanish bo'lagiga ega?", "image": "no_image", "options": ["Bitta harakatlanish bo'lagiga", "Ikkita harakatlanish bo'lagiga", "Uchta harakatlanish bo'lagiga"], "answer": 1 },
+        { "ticket": 1, "id": 10, "question": "Yo'lda «TO'XTASh», yozuvi ko'rinishidagi yo'l chizig'i nimani bildiradi?", "image": "1.10.png", "options": ["Tartibga solingan chorrahada to'xtash chizig'iga yaqinlashayotganligi haqida ogohlantiradi", "To'xtash chizig'i va «To'xtamasdan harakatlanish taqiqlanadi» yo'l belgisi o'rnatilgan yo'l qismiga yaqinlashayotganligini bildiradi", "«Yo'l bering» yo'l belgisiga yaqinlashayotganligini bildiradi"], "answer": 1 },
+        { "ticket": 1, "id": 11, "question": "Qaysi haydovchi to'xtab turish qoidasini buzdi?", "image": "no_image", "options": ["Mototsikl haydovchisi", "Trotuarda to'xtab turgan avtomobil haydovchisi", "Har ikkisi buzdi"], "answer": 2 },
+        { "ticket": 1, "id": 12, "question": "Turar joy dahalarida qanday harakatlar taqiqlangan?", "image": "no_image", "options": ["Faqat o'quv mashg'ulotlarini bajarish", "Faqat dvigatel ishlab turganda to'xtab turish", "Barcha sanab o'tilgan hollarda"], "answer": 2 },
+        { "ticket": 1, "id": 13, "question": "Transport vositalari qattiq ulagichda shatakka olinganda shatakka olgan va shatakka olingan transport vositalari orasidagi masofa qancha bo'lishi kerak?", "image": "no_image", "options": ["4 metrdan oshmasligi", "4 metrdan 6 metrgacha", "Qoidalarda belgilanmagan"], "answer": 0 },
+        { "ticket": 1, "id": 14, "question": "Sanab o'tilgan qaysi holatda transport vositasidan foydalanishga ruxsat etiladi?", "image": "no_image", "options": ["Tashqi yoritgich asboblari ifloslangan bo'lsa", "Yorituvchi chiroq nurining yo'nalishi buzilgan bo'lsa", "Old qismida - oq yoki sariq rangli tumanga qarshi faralar o'rnatilgan bo'lsa"], "answer": 2 },
+        { "ticket": 1, "id": 15, "question": "Yo'lning sirpanchiq qismida rul chambaragini keskin burganda hosil bo'ladigan sirpanishning oldini olish uchun haydovchi qanday ehtiyot choralarini ko'rishi kerak?", "image": "1.15.png", "options": ["Rul chambaragini zudlik bilan sirpanayotgan tomonga burish va tezda avtomobilni harakat yo'nalishini to'g'rilab olish", "Ilashmani uzish", "Tormoz tepkisini bosish"], "answer": 0 },
+        { "ticket": 1, "id": 16, "question": "Ko'rsatilgan yo'l belgilaridan qaysi biri faqat yo'l qoplamasi nam bo'lganda ta'sir etadi?", "image": "1.16.png", "options": ["Faqat A", "Faqat A va B", "Barchasi"], "answer": 0 },
+        { "ticket": 1, "id": 17, "question": "Yuk avtomobili haydovchisi to'xtab turish qoidasini buzdimi?", "image": "no_image", "options": ["Buzdi", "Buzmadi, agar uning ruxsat etilgan to'liq vazni 3,5 tonnadan oshmasa", "Xato qilmadi"], "answer": 0 },
+        { "ticket": 1, "id": 18, "question": "Qanday hollarda aholi punktlarida tovush moslamalaridan foydalanishga ruxsat etiladi?", "image": "1.18.png", "options": ["Quvib o'tishda ogohlantirish uchun", "Yo'l-transport hodisasining oldini olish uchun", "Har ikkala sanab o'tilgan hollarda"], "answer": 1 },
+        { "ticket": 1, "id": 19, "question": "Ko'rsatilgan qaysi belgilar sizga yashash manzilingizga avtomobilda o'tishga ruxsat beradi?", "image": "no_image", "options": ["Faqat A", "Faqat B", "Faqat A va B", "Barchasi"], "answer": 2 },
+        { "ticket": 1, "id": 20, "question": "Sariq rangli miltillovchi ishora nimani bildiradi?", "image": "1.20.png", "options": ["Harakatni taqiqlaydi", "Chorrahani yoki yo'lning xavfli qismini tartibga solinmaganligini bildiradi va harakat qatnashchilarini ogohlantiradi", "Faqat piyodalarga yo'l berish kerakligini bildiradi"], "answer": 1 }
+    ]
+};
+
 (function() {
+    // Telegram WebApp kengaytirish funksiyasi
     var tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) tg.expand();
 
-    var currentTicketNum = null, currentTicket = null, currentIndex = 0;
+    var currentTicketNum = "1";
+    var currentIndex = 0;
     var correctCount = 0, incorrectCount = 0, timerInterval;
 
-    var menuContainer = document.getElementById("menu-container");
-    var quizContainer = document.getElementById("quiz-container");
-    var resultContainer = document.getElementById("result-container");
-    var ticketsGrid = document.getElementById("tickets-grid");
+    // DOM elementlari
+    var tabsContainer = document.getElementById("tickets-tabs-container");
+    var numsContainer = document.getElementById("questions-nums-container");
+    var questionTextBox = document.getElementById("question-text-box");
+    var questionImageBox = document.getElementById("question-image-box");
+    var questionOptionsBox = document.getElementById("question-options-box");
 
-    function showMenu() {
-        menuContainer.style.display = "block";
-        quizContainer.style.display = "none";
-        resultContainer.style.display = "none";
-        ticketsGrid.innerHTML = "";
-        
-        Object.keys(allTickets).sort((a,b) => a-b).forEach(key => {
+    // Tepadagi biletlar panelini (1-15) yaratish
+    function initTabs() {
+        tabsContainer.innerHTML = "";
+        for (let i = 1; i <= 15; i++) {
             var btn = document.createElement("button");
-            btn.className = "ticket-btn";
-            btn.innerText = key;
-            btn.onclick = () => startTicket(key);
-            ticketsGrid.appendChild(btn);
+            btn.className = "ticket-tab" + (String(i) === currentTicketNum ? " active" : "");
+            btn.innerText = i + "-Bilet";
+            btn.onclick = function() {
+                switchTicket(String(i));
+            };
+            tabsContainer.appendChild(btn);
+        }
+    }
+
+    // Chap tomondagi 1-20 savollar ro'yxatini yangilash
+    function updateSidebar() {
+        numsContainer.innerHTML = "";
+        var ticket = allTickets[currentTicketNum] || [];
+        ticket.forEach((_, idx) => {
+            var btn = document.createElement("button");
+            btn.className = "q-num-btn" + (idx === currentIndex ? " active" : "");
+            btn.innerText = idx + 1;
+            btn.onclick = function() {
+                currentIndex = idx;
+                renderQuestion();
+                updateSidebar();
+            };
+            numsContainer.appendChild(btn);
         });
     }
 
-    function startTicket(ticketId) {
-        currentTicketNum = parseInt(ticketId);
-        currentTicket = allTickets[String(currentTicketNum)];
-        currentIndex = 0; correctCount = 0; incorrectCount = 0;
-        
-        menuContainer.style.display = "none";
-        quizContainer.style.display = "block";
-        
+    // Biletni almashtirish funksiyasi
+    function switchTicket(ticketId) {
+        if (!allTickets[ticketId]) {
+            alert(ticketId + "-bilet ma'lumotlari hali kiritilmagan.");
+            return;
+        }
+        currentTicketNum = ticketId;
+        currentIndex = 0;
+        correctCount = 0;
+        incorrectCount = 0;
+
+        initTabs(); // Active klassni yangilash uchun
         startTimer();
-        showQuestion();
+        renderQuestion();
+        updateSidebar();
     }
 
+    // Taymerni ishga tushirish (20 daqiqa)
     function startTimer() {
-        var timeLeft = 1200; // 20 daqiqa
+        var timeLeft = 1200; 
+        // Agar html ichida maxsus taymer divi bo'lsa yangilaydi
         var timerDisplay = document.getElementById("timer");
         clearInterval(timerInterval);
+        
         timerInterval = setInterval(() => {
             timeLeft--;
             var m = Math.floor(timeLeft / 60);
             var s = timeLeft % 60;
-            timerDisplay.innerText = "Vaqt: " + m + ":" + (s < 10 ? "0" : "") + s;
-            if (timeLeft <= 0) { clearInterval(timerInterval); showResults(); }
-        }, 1000);
-    }
-
-    function showQuestion() {
-        var q = currentTicket[currentIndex];
-        document.getElementById("ticket-info").innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1);
-        document.getElementById("question-text").innerText = q.question;
-        
-        var img = document.getElementById("question-img");
-        if (q.image && q.image !== "no_image") {
-            img.src = q.image; img.style.display = "block";
-        } else { img.style.display = "none"; }
-
-        var container = document.getElementById("options-container");
-        container.innerHTML = "";
-        q.options.forEach((opt, idx) => {
-            var btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, q.answer, btn);
-            container.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(idx, correctIdx, btn) {
-        var buttons = document.querySelectorAll(".btn");
-        buttons.forEach(b => b.disabled = true);
-        if (idx === correctIdx) {
-            btn.classList.add('correct'); correctCount++;
-            setTimeout(goToNext, 500);
-        } else {
-            btn.classList.add('wrong');
-            buttons[correctIdx].classList.add('correct');
-            incorrectCount++;
-            setTimeout(goToNext, 1200);
-        }
-    }
-
-    function goToNext() {
-        currentIndex++;
-        if (currentIndex < currentTicket.length) showQuestion();
-        else showResults();
-    }
-
-    function showResults() {
-        clearInterval(timerInterval);
-        quizContainer.style.display = "none";
-        resultContainer.style.display = "block";
-        document.getElementById("correct-stat").innerText = "To'g'ri: " + correctCount;
-        document.getElementById("incorrect-stat").innerText = "Noto'g'ri: " + incorrectCount;
-    }
-
-    showMenu();
-})();
+            if (timerDisplay) {
+                timerDisplay.innerText = "Vaqt: " + m + ":" + (s < 10 ? "0" : "") + s;
+            }
+            if (timeLeft <= 0) { 
+                clearInterval(timerInterval); 
+                alert("Vaqtingiz tugadi!");
+            }
+        }, 1
