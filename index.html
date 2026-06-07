@@ -1,55 +1,137 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>PDD Test Tizimi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестирование ПДД</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f4f9; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .question { font-size: 1.2em; margin-bottom: 15px; }
-        .option { display: block; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
-        .option:hover { background: #eef; }
-        img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        h2, h3 {
+            color: #1a1a1a;
+            margin-top: 0;
+            text-align: center;
+        }
+        .grid-tickets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .ticket-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .ticket-btn:hover {
+            background: #0056b3;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-btn:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+        .progress-text {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
 
-<div class="card" id="quiz-container">
-    <div id="question-box"></div>
-    <div id="options-box"></div>
+<div class="container" id="ticket-screen">
+    <h2>Выберите билет</h2>
+    <div class="grid-tickets" id="tickets-grid">
+        </div>
 </div>
 
-<script>
-    // Bu yerga biz avval yozgan 1-bilet ma'lumotlarini joylaymiz
-    const allTickets = {
-        "1": [
-            { "ticket": 1, "id": 1, "question": "Avtomobil qaysi yo'nalishlarda harakatlanishi mumkin?", "image": "no_image", "options": ["Faqat o'ngga", "To'xtash va svetoforning yashil chirog'ini kutish", "Faqat to'g'riga", "Barcha yo'nalishlar bo'yicha"], "answer": 3 },
-            // ... qolgan savollar shu yerga qo'shiladi
-        ]
-    };
+<div class="container hidden" id="quiz-screen">
+    <div class="quiz-header">
+        <button class="back-btn" onclick="showTicketScreen()">← К билетам</button>
+        <span class="progress-text" id="progress-info">Вопрос 1 из 20</span>
+    </div>
+    <div class="question-text" id="question-box"></div>
+    <div class="image-container" id="image-box"></div>
+    <div class="options-list" id="options-box"></div>
+</div>
 
-    function renderQuestion(ticketId, qId) {
-        const q = allTickets[ticketId][qId - 1];
-        const container = document.getElementById('question-box');
-        const optionsBox = document.getElementById('options-box');
-        
-        container.innerHTML = `<p class="question">${q.question}</p>`;
-        if(q.image !== "no_image") {
-            container.innerHTML += `<img src="${q.image}" alt="Savol rasmi">`;
-        }
-
-        optionsBox.innerHTML = q.options.map((opt, i) => 
-            `<div class="option" onclick="checkAnswer(${i}, ${q.answer})">${opt}</div>`
-        ).join('');
-    }
-
-    function checkAnswer(selected, correct) {
-        alert(selected === correct ? "To'g'ri!" : "Noto'g'ri!");
-    }
-
-    // Birinchi savolni chiqarish
-    renderQuestion("1", 1);
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
