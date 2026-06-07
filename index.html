@@ -2,36 +2,54 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PDD Test</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <title>PDD Test Tizimi</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .question { font-size: 1.2em; margin-bottom: 15px; }
+        .option { display: block; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .option:hover { background: #eef; }
+        img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 
-    <div id="app">
-        <div id="menu-container">
-            <h1 id="menu-title">Biletni tanlang</h1>
-            <div id="tickets-grid"></div>
-        </div>
+<div class="card" id="quiz-container">
+    <div id="question-box"></div>
+    <div id="options-box"></div>
+</div>
 
-        <div id="quiz-container" style="display:none;">
-            <div id="timer">Vaqt: 20:00</div>
-            <div id="ticket-info"></div>
-            <div id="question-text"></div>
-            <img id="question-img" src="" style="display:none;">
-            <div id="options-container"></div>
-        </div>
+<script>
+    // Bu yerga biz avval yozgan 1-bilet ma'lumotlarini joylaymiz
+    const allTickets = {
+        "1": [
+            { "ticket": 1, "id": 1, "question": "Avtomobil qaysi yo'nalishlarda harakatlanishi mumkin?", "image": "no_image", "options": ["Faqat o'ngga", "To'xtash va svetoforning yashil chirog'ini kutish", "Faqat to'g'riga", "Barcha yo'nalishlar bo'yicha"], "answer": 3 },
+            // ... qolgan savollar shu yerga qo'shiladi
+        ]
+    };
 
-        <div id="result-container" style="display:none;">
-            <h2>Natija</h2>
-            <div id="correct-stat"></div>
-            <div id="incorrect-stat"></div>
-            <button class="btn" onclick="location.reload()">Bosh menyu</button>
-        </div>
-    </div>
+    function renderQuestion(ticketId, qId) {
+        const q = allTickets[ticketId][qId - 1];
+        const container = document.getElementById('question-box');
+        const optionsBox = document.getElementById('options-box');
+        
+        container.innerHTML = `<p class="question">${q.question}</p>`;
+        if(q.image !== "no_image") {
+            container.innerHTML += `<img src="${q.image}" alt="Savol rasmi">`;
+        }
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+        optionsBox.innerHTML = q.options.map((opt, i) => 
+            `<div class="option" onclick="checkAnswer(${i}, ${q.answer})">${opt}</div>`
+        ).join('');
+    }
+
+    function checkAnswer(selected, correct) {
+        alert(selected === correct ? "To'g'ri!" : "Noto'g'ri!");
+    }
+
+    // Birinchi savolni chiqarish
+    renderQuestion("1", 1);
+</script>
+
 </body>
 </html>
