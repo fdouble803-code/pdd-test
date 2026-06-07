@@ -1,4 +1,4 @@
-// Полная база данных вопросов по билетам
+// Barcha biletlar va o'zbek tilidagi savollar bazasi
 const allTickets = {
     "1": [
         { "ticket": 1, "id": 1, "question": "Avtomobil qaysi yo'nalishlarda harakatlanishi mumkin?", "image": "no_image", "options": ["Faqat o'ngga", "To'xtash va svetoforning yashil chirog'ini kutish", "Faqat to'g'riga", "Barcha yo'nalishlar bo'yicha"], "answer": 3 },
@@ -9,7 +9,7 @@ const allTickets = {
         { "ticket": 1, "id": 6, "question": "Qaysi hollarda yo'lning harakatlanish bo'lagini ajratuvchi uzuq-uzuq chiziqni bosib o'tish mumkin?", "image": "1.6.png", "options": ["Faqat qayta tizilishda", "Yo'lda boshqa transport vositalari bo'lmasa", "Barcha sanab o'tilgan hollarda"], "answer": 0 },
         { "ticket": 1, "id": 7, "question": "Ushbu ko'rsatilgan holatda mototsikl haydovchisi sizga yo'l berishi kerakmi?", "image": "no_image", "options": ["Yo'q", "Ha"], "answer": 1 },
         { "ticket": 1, "id": 8, "question": "Sanab o'tilgan qaysi hollarda egiluvchan ulagichda shatakka olish taqiqlanadi?", "image": "1.8.png", "options": ["Faqat tog'li yo'llarda", "Yo'l yaxmalak, sirpanchiq bo'lgan hollarda", "Kunning qorong'i vaqtida va etarli ko'rinmaslik sharoitida", "Barcha sanab o'tilgan hollarda"], "answer": 1 },
-        { "ticket": 1, "id": 9, "question": "Ushbu belgilardan qaysi biri bir tomonlama harakat tashkil qilingan yo'lning boshida o'rнатiladi?", "image": "1.9.png", "options": ["Faqat A", "Faqat Б", "Б va Г", "Б yoki В"], "answer": 1 },
+        { "ticket": 1, "id": 9, "question": "Ushbu belgilardan qaysi biri bir tomonlama harakat tashkil qilingan yo'lning boshida o'rnatiladi?", "image": "1.9.png", "options": ["Faqat A", "Faqat Б", "Б va Г", "Б yoki В"], "answer": 1 },
         { "ticket": 1, "id": 10, "question": "Ushbu yo'l nechta harakatlanish bo'lagiga ega?", "image": "no_image", "options": ["Bitta harakatlanish bo'lagiga", "Ikkita harakatlanish bo'lagiga", "Uchta harakatlanish bo'lagiga"], "answer": 1 },
         { "ticket": 1, "id": 11, "question": "Yo'lda «TO'XTASh», yozuvi ko'rinishidagi yo'l chizig'i nimani bildiradi?", "image": "1.11.png", "options": ["Tartibga solingan chorrahada to'xtash chizig'iga yaqinlashayotganligi haqida ogohlantiradi", "To'xtash chizig'i va «To'xtamasdan harakatlanish taqiqlanadi» yo'l belgisi o'rnatilgan yo'l qismiga yaqinlashayotganligini bildiradi", "«Yo'l bering» yo'l belgisiga yaqinlashayotganligini bildiradi"], "answer": 1 },
         { "ticket": 1, "id": 12, "question": "Qaysi haydovchi to'xtab turish qoidasini buzdi?", "image": "no_image", "options": ["Mototsikl haydovchisi", "Trotuarda to'xtab turgan avtomobil haydovchisi", "Har ikkisi buzdi"], "answer": 2 },
@@ -22,13 +22,13 @@ const allTickets = {
         { "ticket": 1, "id": 19, "question": "Qanday hollarda aholi punktlarida tovush moslamalaridan foydalanishga ruxsat etiladi?", "image": "1.19.png", "options": ["Quvib o'tishda ogohlantirish uchun", "Yo'l-transport hodisasining oldini olish uchun", "Har ikkala sanab o'tilgan hollarda"], "answer": 1 },
         { "ticket": 1, "id": 20, "question": "Ko'rsatilgan qaysi belgilar sizga yashash manzilingizga avtomobilda o'tishga ruxsat beradi?", "image": "no_image", "options": ["Faqat A", "Faqat B", "Faqat A va B", "Barchasi"], "answer": 2 }
     ]
-    // Сюда ты сможешь добавлять "2", "3" и так далее по аналогии
+    // Keyingi biletlarni ("2", "3"...) shu yerga qo'shib borasiz
 };
 
 let currentTicket = "1";
 let currentQuestionIndex = 0;
 
-// Генерация кнопок для 15 билетов на главном экране
+// Bosh sahifada 15 ta bilet tugmasini yaratish
 function initTicketScreen() {
     const grid = document.getElementById('tickets-grid');
     grid.innerHTML = '';
@@ -36,16 +36,16 @@ function initTicketScreen() {
     for (let i = 1; i <= 15; i++) {
         const btn = document.createElement('button');
         btn.className = 'ticket-btn';
-        btn.innerText = `Билет ${i}`;
+        btn.innerText = `${i}-Bilet`;
         btn.onclick = () => startQuiz(i.toString());
         grid.appendChild(btn);
     }
 }
 
-// Запуск теста для выбранного билета
+// Tanlangan bilet testini boshlash
 function startQuiz(ticketId) {
     if (!allTickets[ticketId]) {
-        alert(`Билет ${ticketId} еще не заполнен данными.`);
+        alert(`${ticketId}-bilet ma'lumotlari hali kiritilmagan.`);
         return;
     }
     
@@ -58,40 +58,43 @@ function startQuiz(ticketId) {
     renderQuestion();
 }
 
-// Возврат к экрану выбора билетов
+// Biletlar ro'yxatiga qaytish
 function showTicketScreen() {
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('ticket-screen').classList.remove('hidden');
 }
 
-// Отображение текущего вопроса
+// Savolni ekranga chiqarish
 function renderQuestion() {
     const ticket = allTickets[currentTicket];
     if (!ticket || currentQuestionIndex >= ticket.length) {
-        alert("Поздравляем! Вы прошли все вопросы этого билета.");
+        alert("Tabriklaymiz! Siz ushbu biletning barcha savollariga javob berdingiz.");
         showTicketScreen();
         return;
     }
 
     const q = ticket[currentQuestionIndex];
     
-    // Номер текущего вопроса
-    document.getElementById('progress-info').innerText = `Вопрос ${currentQuestionIndex + 1} из ${ticket.length}`;
+    // Progress paneli
+    document.getElementById('progress-info').innerText = `Savol: ${currentQuestionIndex + 1} / ${ticket.length}`;
     
-    // Текст вопроса
+    // Savol matni
     document.getElementById('question-box').innerText = q.question;
 
-    // Контроль изображений (если no_image — блок чистится)
+    // Rasm bloki nazorati (agar no_image bo'lsa butunlay yashiriladi)
     const imageBox = document.getElementById('image-box');
     imageBox.innerHTML = '';
     if (q.image && q.image !== "no_image") {
+        imageBox.style.display = 'block';
         const img = document.createElement('img');
         img.src = q.image;
-        img.alt = `Вопрос ${q.id}`;
+        img.alt = `Savol ${q.id}`;
         imageBox.appendChild(img);
+    } else {
+        imageBox.style.display = 'none';
     }
 
-    // Рендеринг вариантов ответов
+    // Variantlar ro'yxati
     const optionsBox = document.getElementById('options-box');
     optionsBox.innerHTML = '';
     
@@ -104,16 +107,16 @@ function renderQuestion() {
     });
 }
 
-// Проверка ответа
+// Javobni tekshirish
 function checkAnswer(selectedIndex, correctAnswer) {
     if (selectedIndex === correctAnswer) {
-        alert("Правильно!");
+        alert("To'g'ri!");
         currentQuestionIndex++;
         renderQuestion();
     } else {
-        alert("Неправильно! Попробуйте еще раз.");
+        alert("Noto'g'ri! Qayta urinib ko'ring.");
     }
 }
 
-// Старт при полной загрузке страницы
+// Sahifa yuklanganda ishga tushirish
 document.addEventListener("DOMContentLoaded", initTicketScreen);
