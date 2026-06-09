@@ -1,135 +1,126 @@
-// Инициализация Telegram WebApp
-const tg = window.Telegram?.WebApp;
-if (tg) {
-    tg.expand();
-}
-
-// Переменные состояния
+// Переменные состояния теста
 let currentTicket = null;
 let currentQuestionIndex = 0;
 let correctAnswersCount = 0;
 let incorrectAnswersCount = 0;
 let timerInterval = null;
-let timeLeft = 20 * 60;
+let timeLeft = 20 * 60; // 20 минут в секундах
 
-// Привязка элементов интерфейса
-const menuContainer = document.getElementById('menu-container');
-const quizContainer = document.getElementById('quiz-container');
-const resultContainer = document.getElementById('result-container');
-const timerElement = document.getElementById('timer');
-const ticketInfoElement = document.getElementById('ticket-info');
-const questionTextElement = document.getElementById('question-text');
-const questionImgElement = document.getElementById('question-img');
-const optionsContainer = document.getElementById('options-container');
-const correctStatElement = document.getElementById('correct-stat');
-const incorrectStatElement = document.getElementById('incorrect-stat');
-
-// Глобальная функция выбора билета
-window.selectTicket = function(ticketNumber) {
-    // Проверка базы данных
-    if (typeof allTickets === 'undefined') {
+// Инициализация при загрузке страницы
+window.addEventListener("DOMContentLoaded", () => {
+    // Проверяем, загрузились ли данные из data.js
+    if (typeof allTickets === "undefined") {
         alert("Xatolik: 'data.js' fayli yuklanmadi yoki unda xatolik bor! Oxiridagi qavslarni tekshiring.");
         return;
     }
+    generateTicketsGrid();
+});
 
-    // Проверка конкретного билета
-    if (!allTickets[ticketNumber] || allTickets[ticketNumber].length === 0) {
-        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi yoki hali kiritilmagan.`);
-        return;
-    }
+// 1. Генерация сетки билетов (от 1 до 60)
+function generateTicketsGrid() {
+    const grid = document.getElementById("tickets-grid");
+    grid.innerHTML = ""; // Очищаем перед заполнением
 
-    currentTicket = ticketNumber;
-    currentQuestionIndex = 0;
-    correctAnswersCount = 0;
-    incorrectAnswersCount = 0;
-    timeLeft = 20 * 60;
-
-    // Переключение экранов
-    if (menuContainer) menuContainer.style.display = 'none';
-    if (quizContainer) quizContainer.style.display = 'block';
-    if (resultContainer) resultContainer.style.display = 'none';
-
-    startTimer();
-    showQuestion();
-};
-
-// Отображение вопроса
-function showQuestion() {
-    const questions = allTickets[currentTicket];
-    
-    if (currentQuestionIndex >= questions.length) {
-        finishQuiz();
-        return;
-    }
-
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (ticketInfoElement) ticketInfoElement.innerText = `${currentTicket}-bilet, ${currentQuestionIndex + 1}-savol`;
-    if (questionTextElement) questionTextElement.innerText = currentQuestion.question;
-
-    // Картинки
-    if (questionImgElement) {
-        if (!currentQuestion.image || currentQuestion.image === 'no_image' || currentQuestion.image.includes('no image')) {
-            questionImgElement.style.display = 'none';
-            questionImgElement.src = '';
-        } else {
-            questionImgElement.src = `images/${currentQuestion.image}`;
-            questionImgElement.style.display = 'block';
-        }
-    }
-
-    // Варианты ответов
-    if (optionsContainer) {
-        optionsContainer.innerHTML = '';
-        currentQuestion.options.forEach((option, index) => {
-            const optionButton = document.createElement('button');
-            optionButton.className = 'option-btn';
-            optionButton.innerText = option;
-            optionButton.onclick = () => checkAnswer(index, currentQuestion.answer);
-            optionsContainer.appendChild(optionButton);
-        });
+    for (let i = 1; i <= 60; i++) {
+        const btn = document.createElement("button");
+        btn.className = "ticket-btn"; // Стили берутся из твоего style.css
+        btn.innerText = `${i}-bilet`;
+        
+        // Вешаем событие клика на каждый билет
+        btn.onclick = () => startQuiz(i);
+        grid.appendChild(btn);
     }
 }
 
-// Проверка ответа
-function checkAnswer(selectedIndex, correctIndex) {
-    if (selectedIndex === correctIndex) {
+// 2. Старт теста для выбранного билета
+function startQuiz(ticketNumber) {
+    // Проверяем, есть ли такой билет в базе данных
+    if (!allTickets[ticketNumber] || allTickets[ticketNumber].length === 0) {
+        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi! (data.js faylini tekshiring)`);
+        return;
+    }
+
+    currentTicket = allTickets[ticketNumber];
+    currentQuestionIndex = 0;
+    correctAnswersCount = 0;
+    incorrectAnswersCount = 0;
+    timeLeft = 20 * 60; // Сброс таймера на 20 минут
+
+    // Переключение экранов
+    document.getElementById("menu-container").style.display = "none";
+    document.getElementById("quiz-container").style.display = "block";
+    document.getElementById("result-container").style.display = "none";
+
+    // Запуск таймера и показ первого вопроса
+    startTimer();
+    showQuestion();
+}
+
+// 3. Отображение текущего вопроса
+function showQuestion() {
+    const question = currentTicket[currentQuestionIndex];
+
+    // Обновляем информацию о номере билета и вопроса
+    document.getElementById("ticket-info").innerText = `${question.ticket}-bilet, ${currentQuestionIndex + 1}-savol`;
+    document.getElementById("question-text").innerText = question.question;
+
+    // Безопасная обработка картинок (чтобы код не падал из-за no_image)
+    const qImg = document.getElementById("question-img");
+    if (question.image && question.image !== "no_image") {
+        qImg.src = question.image; // Если картинки в папке, используй: "images/" + question.image
+        qImg.style.display = "block";
+    } else {
+        qImg.src = "";
+        qImg.style.display = "none";
+    }
+
+    // Отображение вариантов ответов
+    const optionsContainer = document.getElementById("options-container");
+    optionsContainer.innerHTML = ""; // Очищаем старые варианты
+
+    question.options.forEach((option, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(index);
+        optionsContainer.appendChild(btn);
+    });
+}
+
+// 4. Проверка выбранного ответа
+function checkAnswer(selectedIndex) {
+    const question = currentTicket[currentQuestionIndex];
+
+    if (selectedIndex === question.answer) {
         correctAnswersCount++;
     } else {
         incorrectAnswersCount++;
     }
 
+    // Переходим к следующему вопросу или завершаем тест
     currentQuestionIndex++;
-    showQuestion();
+    if (currentQuestionIndex < currentTicket.length) {
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
 }
 
-// Таймер
+// 5. Работа таймера
 function startTimer() {
-    clearInterval(timerInterval);
+    clearInterval(timerInterval); // На всякий случай очищаем старый таймер
+    updateTimerDOM();
+
     timerInterval = setInterval(() => {
         timeLeft--;
-        
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        
-        if (timerElement) {
-            timerElement.innerText = `Vaqt: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        }
+        updateTimerDOM();
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
+            alert("Vaqt tugadi!");
             finishQuiz();
         }
     }, 1000);
 }
 
-// Завершение
-function finishQuiz() {
-    clearInterval(timerInterval);
-
-    if (quizContainer) quizContainer.style.display = 'none';
-    if (resultContainer) resultContainer.style.display = 'block';
-
-    if (correctStatElement) correctStatElement.innerText = `To'g'ri javoblar: ${correctAnswersCount}`;
-    if (incorrectStatElement) incorrectStatElement.innerText = `Noto'g'ri javoblar: ${incorrectAnswersCount}`;
-}
+// Об
