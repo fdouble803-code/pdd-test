@@ -1,18 +1,18 @@
 // Инициализация Telegram WebApp
 const tg = window.Telegram?.WebApp;
 if (tg) {
-    tg.expand(); // Расширяем окно в телеграме
+    tg.expand();
 }
 
-// Переменные состояния
+// Глобальные переменные игры
 let currentTicket = null;
 let currentQuestionIndex = 0;
 let correctAnswersCount = 0;
 let incorrectAnswersCount = 0;
 let timerInterval = null;
-let timeLeft = 20 * 60; // 20 минут
+let timeLeft = 20 * 60;
 
-// Привязка элементов интерфейса
+// Связывание элементов DOM
 const menuContainer = document.getElementById('menu-container');
 const quizContainer = document.getElementById('quiz-container');
 const resultContainer = document.getElementById('result-container');
@@ -24,20 +24,21 @@ const optionsContainer = document.getElementById('options-container');
 const correctStatElement = document.getElementById('correct-stat');
 const incorrectStatElement = document.getElementById('incorrect-stat');
 
-// Функция старта квиза (Её вызывает кнопка из index.html)
-window.startQuiz = function(ticketNumber) {
-    // Проверяем, существует ли вообще переменная allTickets (из data.js)
+// Функция вызова билета (назначается кнопкам из HTML)
+window.selectTicket = function(ticketNumber) {
+    // 1. Проверяем, существует ли переменная allTickets вообще
     if (typeof allTickets === 'undefined') {
-        alert("Xatolik: data.js fayli yuklanmagan yoki unda xatolik bor!");
+        alert("Xatolik: 'data.js' fayli yuklanmadi yoki unda xatolik bor. Iltimos, fayldagi qavslarni tekshiring!");
         return;
     }
 
-    // Проверяем наличие конкретного билета в базе
+    // 2. Проверяем, есть ли такой билет в объекте базы данных
     if (!allTickets[ticketNumber] || allTickets[ticketNumber].length === 0) {
-        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi (data.js faylini tekshiring).`);
+        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi yoki hali yuklanmagan.`);
         return;
     }
 
+    // Инициализация данных билета
     currentTicket = ticketNumber;
     currentQuestionIndex = 0;
     correctAnswersCount = 0;
@@ -53,50 +54,49 @@ window.startQuiz = function(ticketNumber) {
     showQuestion();
 };
 
-// Отображение вопроса
+// Функция отрисовки вопроса
 function showQuestion() {
-    const questions = allTickets[currentTicket];
-    
-    if (currentQuestionIndex >= questions.length) {
-        finishQuiz();
-        return;
-    }
-
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (ticketInfoElement) {
-        ticketInfoElement.innerText = `${currentTicket}-bilet, ${currentQuestionIndex + 1}-savol`;
-    }
-    if (questionTextElement) {
-        questionTextElement.innerText = currentQuestion.question;
-    }
-
-    // Обработка картинок ("no_image" или пустая строка)
-    if (questionImgElement) {
-        if (currentQuestion.image === 'no_image' || !currentQuestion.image) {
-            questionImgElement.style.display = 'none';
-            questionImgElement.src = '';
-        } else {
-            // Путь к картинкам. Убедись, что папка называется именно "images" (маленькими буквами)
-            questionImgElement.src = `images/${currentQuestion.image}`;
-            questionImgElement.style.display = 'block';
+    try {
+        const questions = allTickets[currentTicket];
+        
+        if (currentQuestionIndex >= questions.length) {
+            finishQuiz();
+            return;
         }
-    }
 
-    // Рендеринг вариантов ответов
-    if (optionsContainer) {
-        optionsContainer.innerHTML = '';
-        currentQuestion.options.forEach((option, index) => {
-            const optionButton = document.createElement('button');
-            optionButton.className = 'option-btn';
-            optionButton.innerText = option;
-            optionButton.onclick = () => checkAnswer(index, currentQuestion.answer);
-            optionsContainer.appendChild(optionButton);
-        });
+        const currentQuestion = questions[currentQuestionIndex];
+
+        if (ticketInfoElement) ticketInfoElement.innerText = `${currentTicket}-bilet, ${currentQuestionIndex + 1}-savol`;
+        if (questionTextElement) questionTextElement.innerText = currentQuestion.question;
+
+        // Обработка картинок вопросов
+        if (questionImgElement) {
+            if (!currentQuestion.image || currentQuestion.image === 'no_image' || currentQuestion.image.includes('no image')) {
+                questionImgElement.style.display = 'none';
+                questionImgElement.src = '';
+            } else {
+                questionImgElement.src = `images/${currentQuestion.image}`;
+                questionImgElement.style.display = 'block';
+            }
+        }
+
+        // Вывод вариантов ответов
+        if (optionsContainer) {
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'option-btn';
+                optionButton.innerText = option;
+                optionButton.onclick = () => checkAnswer(index, currentQuestion.answer);
+                optionsContainer.appendChild(optionButton);
+            });
+        }
+    } catch (e) {
+        console.error("Savolni ko'rsatishda xatolik:", e);
     }
 }
 
-// Проверка ответа
+// Проверка нажатого ответа
 function checkAnswer(selectedIndex, correctIndex) {
     if (selectedIndex === correctIndex) {
         correctAnswersCount++;
@@ -108,7 +108,7 @@ function checkAnswer(selectedIndex, correctIndex) {
     showQuestion();
 }
 
-// Таймер
+// Запуск таймера обратного отсчета
 function startTimer() {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -128,7 +128,7 @@ function startTimer() {
     }, 1000);
 }
 
-// Завершение теста
+// Финиш теста
 function finishQuiz() {
     clearInterval(timerInterval);
 
