@@ -6,8 +6,9 @@ let timerInterval = null;
 let timeLeft = 20 * 60; // 20 минут
 
 window.addEventListener("DOMContentLoaded", () => {
+    // Безопасная проверка: если data.js не загрузился, просто пишем в консоль, чтобы не бесить алертами
     if (typeof allTickets === "undefined") {
-        alert("script.js ne zagruzilsya ili soderjit oshibki!");
+        console.error("data.js fayli topilmadi yoki xato yozilgan!");
         return;
     }
     generateTicketsGrid();
@@ -21,9 +22,7 @@ function generateTicketsGrid() {
 
     for (let i = 1; i <= 60; i++) {
         const btn = document.createElement("button");
-        // Присваиваем класс btn, так как он у тебя используется для стилей
-        btn.className = "btn"; 
-        btn.style.margin = "5px"; // Небольшой отступ между кнопками
+        btn.className = "btn"; // Твой класс стилей из CSS
         btn.innerText = `${i}-bilet`;
         
         btn.onclick = () => startQuiz(i);
@@ -33,11 +32,11 @@ function generateTicketsGrid() {
 
 // 2. Старт теста
 function startQuiz(ticketNumber) {
-    // Превращаем число в строку, так как в твоем data.js ключи "1", "2" — это строки
     const ticketKey = String(ticketNumber);
 
-    if (!allTickets[ticketKey]) {
-        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi!`);
+    // ПРОВЕРКА: Если билета нет в data.js, то не переключаем экран, а деликатно предупреждаем
+    if (!allTickets || !allTickets[ticketKey]) {
+        alert(`Baza ma'lumotlarida ${ticketNumber}-bilet hali yo'q! Hozircha faqat 1-biletni tekshirib ko'ring.`);
         return;
     }
 
@@ -47,7 +46,7 @@ function startQuiz(ticketNumber) {
     incorrectAnswersCount = 0;
     timeLeft = 20 * 60; 
 
-    // Показываем/скрываем контейнеры строго по твоим ID в HTML
+    // Скрываем меню, показываем тест
     document.getElementById("menu-container").style.display = "none";
     document.getElementById("quiz-container").style.display = "block";
     document.getElementById("result-container").style.display = "none";
@@ -58,13 +57,18 @@ function startQuiz(ticketNumber) {
 
 // 3. Отображение вопроса
 function showQuestion() {
+    if (!currentTicket || !currentTicket[currentQuestionIndex]) return;
+    
     const question = currentTicket[currentQuestionIndex];
 
-    // Заполняем информацию о билете и текст вопроса
-    document.getElementById("ticket-info").innerText = `${question.ticket}-bilet, ${currentQuestionIndex + 1}-savol`;
-    document.getElementById("question-text").innerText = question.question;
+    // Заполняем инфо
+    const ticketInfo = document.getElementById("ticket-info");
+    const questionText = document.getElementById("question-text");
+    
+    if (ticketInfo) ticketInfo.innerText = `${question.ticket}-bilet, ${currentQuestionIndex + 1}-savol`;
+    if (questionText) questionText.innerText = question.question;
 
-    // Работа с картинкой
+    // Работа с картинкой (no_image контроль)
     const qImg = document.getElementById("question-img");
     if (qImg) {
         if (question.image && question.image !== "no_image") {
@@ -76,14 +80,14 @@ function showQuestion() {
         }
     }
 
-    // Рендерим варианты ответов
+    // Варианты ответов
     const optionsContainer = document.getElementById("options-container");
     if (optionsContainer) {
         optionsContainer.innerHTML = ""; 
 
         question.options.forEach((option, index) => {
             const btn = document.createElement("button");
-            btn.className = "btn"; // Используем твой стандартный класс кнопок
+            btn.className = "btn";
             btn.style.display = "block";
             btn.style.width = "100%";
             btn.style.margin = "10px 0";
@@ -124,17 +128,18 @@ function startTimer() {
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            alert("Vaqt tugadi!");
             finishQuiz();
         }
     }, 1000);
 }
 
 function updateTimerDOM() {
+    const timerElement = document.getElementById("timer");
+    if (!timerElement) return;
+    
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    const formattedTime = `Vaqt: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    document.getElementById("timer").innerText = formattedTime;
+    timerElement.innerText = `Vaqt: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 // 6. Финиш
@@ -148,6 +153,9 @@ function finishQuiz() {
     const skipped = totalQuestions - (correctAnswersCount + incorrectAnswersCount);
     incorrectAnswersCount += skipped;
 
-    document.getElementById("correct-stat").innerText = `To'g'ri javoblar: ${correctAnswersCount}`;
-    document.getElementById("incorrect-stat").innerText = `Noto'g'ri javoblar: ${incorrectAnswersCount}`;
+    const correctStat = document.getElementById("correct-stat");
+    const incorrectStat = document.getElementById("incorrect-stat");
+    
+    if (correctStat) correctStat.innerText = `To'g'ri javoblar: ${correctAnswersCount}`;
+    if (incorrectStat) incorrectStat.innerText = `Noto'g'ri javoblar: ${incorrectAnswersCount}`;
 }
