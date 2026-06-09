@@ -106,7 +106,7 @@ const allTickets = {
       "ticket": 2,
       "id": 11,
       "question": "Sizga ruxsat etilgan to'la vazni 3,5 tonnadan ortiq yuk avtomobilida harakatlanish:",
-      "image": "2.11.png",
+      "image": "no_image",
       "options": ["Faqat to'g'riga", "To'g'riga va o'ngga", "Barcha yo'nalishlarda"],
       "answer": 0
     },
@@ -122,7 +122,7 @@ const allTickets = {
       "ticket": 2,
       "id": 13,
       "question": "Ushbu belgi axborot beradi:",
-      "image": "2.13.png",
+      "image": "no_image",
       "options": ["Siz o'ngga yoki chapga burilishingiz kerakligini ko'rsatadi", "Reversiv harakatlanish yo'liga chiqish haqida", "Chorrahadan o'ngga va chapga bir tomonlama harakat tashkil qilingan"],
       "answer": 1
     },
@@ -170,7 +170,7 @@ const allTickets = {
       "ticket": 2,
       "id": 19,
       "question": "Qaysi yo'nalishda harakatlanishni davom ettirishingiz mumkin?",
-      "image": "2.19.png",
+      "image": "no_image",
       "options": ["Faqat chapga", "Chapga va orqaga qayrilib olishga", "O'ngga, chapga va orqaga qayrilib olishga"],
       "answer": 2
     },
