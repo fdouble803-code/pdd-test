@@ -1,180 +1,152 @@
-const allTickets = {
-    "1": [
-        { "ticket": 1, "id": 1, "question": "Svetaforning yashil miltillovchi ishorasi nimani bildiradi?", "image": "no_image", "options": ["Svetafor nosozligini", "Harakatga ruxsat beradi va tez orada taqiqlovchi ishora yonishi to'g'risida axborot beradi", "Harakatni davom ettirishni taqiqlaydi"], "answer": 1 },
-        { "ticket": 1, "id": 2, "question": "Ushbu joyda avtomobilni to'xtab turish uchun qo'yishga ruxsat etiladimi?", "image": "1.2.png", "options": ["Ha", "Yo'q"], "answer": 1 },
-        { "ticket": 1, "id": 3, "question": "Siz chorrahadan to'g'riga o'tmoqchisiz. Ushbu vaziyatda Sizning harakatingiz?", "image": "1.3.png", "options": ["Chorrahaga birinchi kirgan qizil avtomobilga yo'l berish", "Qizil avtomobil yo'l berayotganiga ishonch xosil qilib chorrahadan birinchi o'tish"], "answer": 1 },
-        { "ticket": 1, "id": 4, "question": "Siz chorrahadan chapga burilmoqchisiz. Ushbu vaziyatda kimga yo'l berasiz?", "image": "1.4.png", "options": ["Faqat avtobusga", "Faqat qizil avtomobilga", "Hech kimga"], "answer": 2 },
-        { "ticket": 1, "id": 5, "question": "Qaysi hollarda yo'lning harakatlanish bo'lagini ajratuvchi uzuq-uzuq chiziqni bosib o'tish mumkin?", "image": "no_image", "options": ["Faqat qayta tizilishda", "Yo'lda boshqa transport vositalari bo'lmasa", "Barcha sanab o'tilgan hollarda"], "answer": 0 },
-        { "ticket": 1, "id": 6, "question": "Ushbu ko'rsatilgan holatda mototsikl haydovchisi sizga yo'l berishi kerakmi?", "image": "1.6.png", "options": ["Yo'q", "Ha"], "answer": 1 },
-        { "ticket": 1, "id": 7, "question": "Sanab o'tilgan qaysi hollarda egiluvchan ulagichda shatakka olish taqiqlanadi?", "image": "no_image", "options": ["Faqat tog'li yo'llarda", "Yo'l yaxmalak, sirpanchiq bo'lgan hollarda", "Kunning qorong'i vaqtida va etarli ko'rinmaslik sharoitida", "Barcha sanab o'tilgan hollarda"], "answer": 1 },
-        { "ticket": 1, "id": 8, "question": "Ushbu belgilardan qaysi biri bir tomonlama harakat tashkil qilingan yo'lning boshida o'rnatiladi?", "image": "1.8.png", "options": ["Faqat A", "Faqat Б", "Б va Г", "Б yoki В"], "answer": 1 },
-        { "ticket": 1, "id": 9, "question": "Ushbu yo'l nechta harakatlanish bo'lagiga ega?", "image": "1.9.png", "options": ["Bitta harakatlanish bo'lagiga", "Ikkita harakatlanish bo'lagiga", "Uchta harakatlanish bo'lagiga"], "answer": 1 },
-        { "ticket": 1, "id": 10, "question": "Yo'lda «TO'XTASh», yozuvi ko'rinishidagi yo'l chizig'i nimani bildiradi?", "image": "no_image", "options": ["Tartibga solingan chorrahada to'xtash chizig'iga yaqinlashayotganligi haqida ogohlantiradi", "To'xtash chizig'i va «To'xtamasdan harakatlanish taqiqlanadi» yo'l belgisi o'rnatilgan yo'l qismiga yaqinlashayotganligini bildiradi", "«Yo'l bering» yo'l belgisiga yaqinlashayotganligini bildiradi"], "answer": 1 },
-        { "ticket": 1, "id": 11, "question": "Qaysi haydovchi to'xtab turish qoidasini buzdi?", "image": "1.11.png", "options": ["Mototsikl haydovchisi", "Trotuarda to'xtab turgan avtomobil haydovchisi", "Har ikkisi buzdi"], "answer": 2 },
-        { "ticket": 1, "id": 12, "question": "Turar joy dahalarida qanday harakatlar taqiqlangan?", "image": "no_image", "options": ["Faqat o'quv mashg'ulotlarini bajarish", "Faqat dvigatel ishlab turganda to'xtab turish", "Barcha sanab o'tilgan hollarda"], "answer": 2 },
-        { "ticket": 1, "id": 13, "question": "Transport vositalari qattiq ulagichda shatakka olinganda shatakka olgan va shatakka olingan transport vositalari orasidagi masofa qancha bo'lishi kerak?", "image": "no_image", "options": ["4 metrdan oshmasligi", "4 metrdan 6 metrgacha", "Qoidalarda belgilanmagan"], "answer": 0 },
-        { "ticket": 1, "id": 14, "question": "Sanab o'tilgan qaysi holatda transport vositasidan foydalanishga ruxsat etiladi?", "image": "no_image", "options": ["Tashqi yoritgich asboblari ifloslangan bo'lsa", "Yorituvchi chiroq nurining yo'nalishi buzilgan bo'lsa", "Old qismida - oq yoki sariq rangli tumanga qarshi faralar o'rnatilgan bo'lsa"], "answer": 2 },
-        { "ticket": 1, "id": 15, "question": "Yo'lning sirpanchiq qismida rul chambaragini keskin burganda hosil bo'ladigan sirpanishning oldini olish uchun haydovchi qanday ehtiyot choralarini ko'rishi kerak?", "image": "no_image", "options": ["Rul chambaragini zudlik bilan sirpanayotgan tomonga burish va tezda avtomobilni harakat yo'nalishini to'g'rilab olish", "Ilashmani uzish", "Tormoz tepkisini bosish"], "answer": 0 },
-        { "ticket": 1, "id": 16, "question": "Ko'rsatilgan yo'l belgilaridan qaysi biri faqat yo'l qoplamasi nam bo'lganda ta'sir etadi?", "image": "1.16.png", "options": ["Faqat A", "Faqat A va B", "Barchasi"], "answer": 0 },
-        { "ticket": 1, "id": 17, "question": "Yuk avtomobili haydovchisi to'xtab turish qoidasini buzdimi?", "image": "1.17.png", "options": ["Buzdi", "Buzmadi, agar uning ruxsat etilgan to'liq vazni 3,5 tonnadan oshmasa", "Xato qilmadi"], "answer": 0 },
-        { "ticket": 1, "id": 18, "question": "Qanday hollarda aholi punktlarida tovush moslamalaridan foydalanishga ruxsat etiladi?", "image": "no_image", "options": ["Quvib o'tishda ogohlantirish uchun", "Yo'l-transport hodisasining oldini olish uchun", "Har ikkala sanab o'tilgan hollarda"], "answer": 1 },
-        { "ticket": 1, "id": 19, "question": "Ko'rsatilgan qaysi belgilar sizga yashash manzilingizga avtomobilda o'tishga ruxsat beradi?", "image": "1.19.png", "options": ["Faqat A", "Faqat B", "Faqat A va B", "Barchasi"], "answer": 2 },
-        { "ticket": 1, "id": 20, "question": "Sariq rangli miltillovchi ishora nimani bildiradi?", "image": "no_image", "options": ["Harakatni taqiqlaydi", "Chorrahani yoki yo'lning xavfli qismini tartibga solinmaganligini bildiradi va harakat qatnashchilarini ogohlantiradi", "Faqat piyodalarga yo'l berish kerakligini bildiradi"], "answer": 1 }
-    ]
-};
+// Инициализация Telegram WebApp
+const tg = window.Telegram.WebApp;
+tg.expand(); // Расширяем окно на весь экран
 
-(function() {
-    var tg = window.Telegram ? window.Telegram.WebApp : null;
-    if (tg) tg.expand();
+// Переменные для управления состоянием теста
+let currentTicket = null;
+let currentQuestionIndex = 0;
+let correctAnswersCount = 0;
+let incorrectAnswersCount = 0;
+let timerInterval = null;
+let timeLeft = 20 * 60; // 20 минут в секундах
 
-    var currentTicketNum = "1";
-    var currentIndex = 0;
-    var correctCount = 0, incorrectCount = 0;
-    var timerInterval, timeLeft = 1200;
+// Элементы интерфейса из index.html
+const menuContainer = document.getElementById('menu-container');
+const quizContainer = document.getElementById('quiz-container');
+const resultContainer = document.getElementById('result-container');
+const ticketsGrid = document.getElementById('tickets-grid');
+const timerElement = document.getElementById('timer');
+const ticketInfoElement = document.getElementById('ticket-info');
+const questionTextElement = document.getElementById('question-text');
+const questionImgElement = document.getElementById('question-img');
+const optionsContainer = document.getElementById('options-container');
+const correctStatElement = document.getElementById('correct-stat');
+const incorrectStatElement = document.getElementById('incorrect-stat');
 
-    var tabsContainer = document.getElementById("tickets-tabs-container");
-    var numsContainer = document.getElementById("questions-nums-container");
-    var questionTextBox = document.getElementById("question-text-box");
-    var questionImageBox = document.getElementById("question-image-box");
-    var questionOptionsBox = document.getElementById("question-options-box");
-    var timerDisplay = document.getElementById("timer-display");
-    var correctDisplay = document.getElementById("correct-display");
-    var incorrectDisplay = document.getElementById("incorrect-display");
-
-    function initTabs() {
-        tabsContainer.innerHTML = "";
-        for (let i = 1; i <= 15; i++) {
-            var btn = document.createElement("button");
-            btn.className = "ticket-tab" + (String(i) === currentTicketNum ? " active" : "");
-            btn.innerText = i + "-Bilet";
-            btn.onclick = function() {
-                switchTicket(String(i));
-            };
-            tabsContainer.appendChild(btn);
-        }
-    }
-
-    function updateSidebar() {
-        numsContainer.innerHTML = "";
-        var ticket = allTickets[currentTicketNum] || [];
-        ticket.forEach((_, idx) => {
-            var btn = document.createElement("button");
-            btn.className = "q-num-btn" + (idx === currentIndex ? " active" : "");
-            btn.innerText = idx + 1;
-            btn.onclick = function() {
-                currentIndex = idx;
-                renderQuestion();
-                updateSidebar();
-            };
-            numsContainer.appendChild(btn);
-        });
-    }
-
-    function switchTicket(ticketId) {
-        if (!allTickets[ticketId]) {
-            alert(ticketId + "-bilet ma'lumotlari hali kiritilmagan.");
-            return;
-        }
-        currentTicketNum = ticketId;
-        currentIndex = 0;
-        correctCount = 0;
-        incorrectCount = 0;
-        timeLeft = 1200;
-
-        if (correctDisplay) correctDisplay.innerText = "To'g'ri: 0";
-        if (incorrectDisplay) incorrectDisplay.innerText = "Noto'g'ri: 0";
-
-        initTabs();
-        startTimer();
-        renderQuestion();
-        updateSidebar();
-    }
-
-    function startTimer() {
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            var m = Math.floor(timeLeft / 60);
-            var s = timeLeft % 60;
-            if (timerDisplay) {
-                timerDisplay.innerText = "Vaqt: " + m + ":" + (s < 10 ? "0" : "") + s;
-            }
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                alert("Vaqtingiz tugadi!");
-            }
-        }, 1000);
-    }
-
-    function renderQuestion() {
-        var ticket = allTickets[currentTicketNum];
-        if (!ticket || !ticket[currentIndex]) return;
-
-        var q = ticket[currentIndex];
-        questionTextBox.innerText = currentTicketNum + "-Bilet | Savol: " + (currentIndex + 1) + "\n\n" + q.question;
+// 1. ГЕНЕРАЦИЯ СПИСКА ИЗ 60 БИЛЕТОВ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+function generateTicketsMenu() {
+    ticketsGrid.innerHTML = ''; // Очищаем сетку
+    
+    // Цикл ровно на 60 билетов
+    for (let i = 1; i <= 60; i++) {
+        const button = document.createElement('button');
+        button.className = 'ticket-btn';
+        button.innerText = `${i}-bilet`;
         
-        questionImageBox.innerHTML = "";
-        if (q.image && q.image !== "no_image") {
-            questionImageBox.style.display = "block";
-            var img = document.createElement("img");
-            img.src = q.image;
-            img.alt = "Savol " + q.id;
-            questionImageBox.appendChild(img);
-        } else {
-            questionImageBox.style.display = "none";
-        }
+        // Навешиваем событие клика на каждый билет
+        button.onclick = () => startQuiz(i);
+        ticketsGrid.appendChild(button);
+    }
+}
 
-        questionOptionsBox.innerHTML = "";
-        q.options.forEach((opt, idx) => {
-            var btn = document.createElement("button");
-            btn.className = "option-item";
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, q.answer, btn);
-            questionOptionsBox.appendChild(btn);
-        });
+// 2. НАЧАЛО ТЕСТИРОВАНИЯ
+function startQuiz(ticketNumber) {
+    // Проверяем, есть ли данные для выбранного билета в data.js
+    if (!allTickets || !allTickets[ticketNumber]) {
+        alert("Bu bilet ma'lumotlari hali yuklanmagan (data.js faylini tekshiring).");
+        return;
     }
 
-    function checkAnswer(selectedIndex, correctAnswerIndex, clickedBtn) {
-        var buttons = questionOptionsBox.querySelectorAll(".option-item");
-        buttons.forEach(b => b.disabled = true);
+    currentTicket = ticketNumber;
+    currentQuestionIndex = 0;
+    correctAnswersCount = 0;
+    incorrectAnswersCount = 0;
+    timeLeft = 20 * 60; // Сброс таймера на 20 минут
 
-        if (selectedIndex === correctAnswerIndex) {
-            clickedBtn.style.backgroundColor = "#10b981";
-            clickedBtn.style.borderColor = "#10b981";
-            clickedBtn.style.color = "#ffffff";
-            correctCount++;
-            if (correctDisplay) correctDisplay.innerText = "To'g'ri: " + correctCount;
-            setTimeout(goToNext, 500);
-        } else {
-            clickedBtn.style.backgroundColor = "#ef4444";
-            clickedBtn.style.borderColor = "#ef4444";
-            clickedBtn.style.color = "#ffffff";
-            
-            if (buttons[correctAnswerIndex]) {
-                buttons[correctAnswerIndex].style.backgroundColor = "#10b981";
-                buttons[correctAnswerIndex].style.borderColor = "#10b981";
-                buttons[correctAnswerIndex].style.color = "#ffffff";
-            }
-            incorrectCount++;
-            if (incorrectDisplay) incorrectDisplay.innerText = "Noto'g'ri: " + incorrectCount;
-            setTimeout(goToNext, 1200);
-        }
-    }
+    // Переключение экранов
+    menuContainer.style.display = 'none';
+    quizContainer.style.display = 'block';
+    resultContainer.style.display = 'none';
 
-    function goToNext() {
-        var ticket = allTickets[currentTicketNum];
-        currentIndex++;
-        if (currentIndex < ticket.length) {
-            renderQuestion();
-            updateSidebar();
-        } else {
-            clearInterval(timerInterval);
-            alert("Bilet yakunlandi!\n\nTo'g'ri javoblar soni: " + correctCount + "\nNoto'g'ri javoblar soni: " + incorrectCount);
-        }
-    }
-
-    initTabs();
+    // Запуск таймера и отображение первого вопроса
     startTimer();
-    renderQuestion();
-    updateSidebar();
-})();
+    showQuestion();
+}
+
+// 3. ОТОБРАЖЕНИЕ ТЕКУЩЕГО ВОПРОСА
+function showQuestion() {
+    const questions = allTickets[currentTicket];
+    
+    // Если вопросы в билете закончились — завершаем тест
+    if (currentQuestionIndex >= questions.length) {
+        finishQuiz();
+        return;
+    }
+
+    const currentQuestion = questions[currentQuestionIndex];
+
+    // Выводим информацию о номере билета и вопроса
+    ticketInfoElement.innerText = `${currentTicket}-bilet, ${currentQuestionIndex + 1}-savol`;
+    questionTextElement.innerText = currentQuestion.question;
+
+    // Проверка картинки: если "no_image" — скрываем тег, если есть — показываем
+    if (currentQuestion.image === 'no_image' || !currentQuestion.image) {
+        questionImgElement.style.display = 'none';
+        questionImgElement.src = '';
+    } else {
+        questionImgElement.src = `images/${currentQuestion.image}`; // Путь к папке с картинками
+        questionImgElement.style.display = 'block';
+    }
+
+    // Рендеринг вариантов ответов
+    optionsContainer.innerHTML = '';
+    currentQuestion.options.forEach((option, index) => {
+        const optionButton = document.createElement('button');
+        optionButton.className = 'option-btn';
+        optionButton.innerText = option;
+        
+        // Обработка выбора ответа
+        optionButton.onclick = () => checkAnswer(index, currentQuestion.answer);
+        optionsContainer.appendChild(optionButton);
+    });
+}
+
+// 4. ПРОВЕРКА ВЫБРАННОГО ОТВЕТА
+function checkAnswer(selectedIndex, correctIndex) {
+    if (selectedIndex === correctIndex) {
+        correctAnswersCount++;
+    } else {
+        incorrectAnswersCount++;
+    }
+
+    // Переходим к следующему вопросу
+    currentQuestionIndex++;
+    showQuestion();
+}
+
+// 5. РАБОТА ТАЙМЕРА
+function startTimer() {
+    clearInterval(timerInterval);
+    
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        // Форматирование времени (например, 19:05)
+        timerElement.innerText = `Vaqt: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        // Если время вышло — принудительно завершаем тест
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            finishQuiz();
+        }
+    }, 1000);
+}
+
+// 6. ЗАВЕРШЕНИЕ ТЕСТА И ВЫВОД РЕЗУЛЬТАТОВ
+function finishQuiz() {
+    clearInterval(timerInterval);
+
+    // Переключение экранов
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+
+    // Вывод статистики
+    correctStatElement.innerText = `To'g'ri javoblar: ${correctAnswersCount}`;
+    incorrectStatElement.innerText = `Noto'g'ri javoblar: ${incorrectAnswersCount}`;
+}
+
+// Запускаем генерацию меню при первой загрузке скрипта
+generateTicketsMenu();
