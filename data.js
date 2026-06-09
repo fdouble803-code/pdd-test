@@ -21,3 +21,165 @@ const allTickets = {
         { "ticket": 1, "id": 19, "question": "Ko'rsatilgan qaysi belgilar sizga yashash manzilingizga avtomobilda o'tishga ruxsat beradi?", "image": "1.19.png", "options": ["Faqat A", "Faqat B", "Faqat A va B", "Barchasi"], "answer": 2 },
         { "ticket": 1, "id": 20, "question": "Sariq rangli miltillovchi ishora nimani bildiradi?", "image": "no_image", "options": ["Harakatni taqiqlaydi", "Chorrahani yoki yo'lning xavfli qismini tartibga solinmaganligini bildiradi va harakat qatnashchilarini ogohlantiradi", "Faqat piyodalarga yo'l berish kerakligini bildiradi"], "answer": 1 }
     ],
+  "2": [
+    {
+      "ticket": 2,
+      "id": 1,
+      "question": "Ko'rsatilgan belgilardan qaysi biri yo'lning ko'rinish masofasi cheklangan joylarda majburan to'xtagan transport vositalarini belgilash uchun qo'llaniladi?",
+      "image": "2.1.png",
+      "options": ["«A»", "«B»", "«V»"],
+      "answer": 0
+    },
+    {
+      "ticket": 2,
+      "id": 2,
+      "question": "Haydovchi chapga burilishda qaysi yo'nalish bo'yicha qoidani buzmoqda?",
+      "image": "2.2.png",
+      "options": ["Faqat «A» yo'nalishi bo'yicha", "Faqat «B» yo'nalishi bo'yicha", "Ko'rsatilgan barcha yo'nalish bo'yicha"],
+      "answer": 2
+    },
+    {
+      "ticket": 2,
+      "id": 3,
+      "question": "Ushbu ko'rsatilgan vaziyatda sizga hovliga orqa bilan kirib qayrilib olishga ruxsat beriladimi?",
+      "image": "2.3.png",
+      "options": ["Har qanday hollarda ruxsat beriladi", "Ruxsat beriladi agarda bunda harakatning boshqa ishtirokchilariga halaqit berilmasa", "Taqiqlanadi"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 4,
+      "question": "Yo'l harakati qoidalari bo'yicha «yonlama oraliq masofa»ni ko'rsating:",
+      "image": "2.4.png",
+      "options": ["Faqat «A»", "Faqat «B»", "Faqat «V»", "«A» va «V»"],
+      "answer": 3
+    },
+    {
+      "ticket": 2,
+      "id": 5,
+      "question": "Tumanga qarshi chiroqlar va orqa tumanga qarshi chiroqlar birga yoqilishi mumkin?",
+      "image": "no_image",
+      "options": ["Cheklangan ko'rinish sharoitida", "Etarlicha ko'rinmaslik sharoitida"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 6,
+      "question": "Agar avtomobil antiblokirovkali (ABS) tormoz tizimi bilan jihozlangan bo'lsa keskin tormoz berishni qanday amalga oshirish kerak?",
+      "image": "no_image",
+      "options": ["Tormoz tepkisini uzub-uzub bosish yo'li bilan", "Tormoz tepkisini oxirigacha bosish va avtomobilni to'liq to'xtaguncha tepkini qo'yib yubormaslik", "To'xtab turish tormozi tizimini qo'llash yo'li bilan"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 7,
+      "question": "Haydovchiga transport vositasini boshqarish vaqtida telefondan foydalanishga ruxsat etiladimi?",
+      "image": "no_image",
+      "options": ["Ruxsat etiladi", "Qo'lni ishlatmasdan texnik vositalardan foydalanish gaplashishga ruxsat etiladi", "20 km/s tezlikda harakatlanayotganda ruxsat etiladi"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 8,
+      "question": "Ushbu yo'l belgisi chorrahaga yaqinlashayotganlik to'g'risida ogohlantiradi, bunda Siz:",
+      "image": "2.8.png",
+      "options": ["Birinchi bo'lib o'tish huquqiga egasiz", "Kesib o'tayotgan yo'ldagi transport vositalariga yo'l berishingiz kerak", "Faqatgina o'ng tomondan yaqinlashib kelayotgan transport vositalariga yo'l berishingiz kerak"],
+      "answer": 2
+    },
+    {
+      "ticket": 2,
+      "id": 9,
+      "question": "Shatakka olib harakatlanishingiz mumkin:",
+      "image": "2.9.png",
+      "options": ["Faqat «A» yo'nalishi bo'yicha", "Faqat «B» yo'nalishi bo'yicha", "Ko'rsatilgan barcha yo'nalish bo'yicha"],
+      "answer": 0
+    },
+    {
+      "ticket": 2,
+      "id": 10,
+      "question": "Ko'rsatilgan qaysi belgi reversiv harakat boshlanishi haqida axborot beradi?",
+      "image": "2.10.png",
+      "options": ["«A»", "«B»", "«V»"],
+      "answer": 2
+    },
+    {
+      "ticket": 2,
+      "id": 11,
+      "question": "Sizga ruxsat etilgan to'la vazni 3,5 tonnadan ortiq yuk avtomobilida harakatlanish:",
+      "image": "2.11.png",
+      "options": ["Faqat to'g'riga", "To'g'riga va o'ngga", "Barcha yo'nalishlarda"],
+      "answer": 0
+    },
+    {
+      "ticket": 2,
+      "id": 12,
+      "question": "M3 toifadagi avtotransport vositalarining boshqaruv qurilmasidagi qanday eng katta lyuft yig'indisiga yo'l qo'yiladi:",
+      "image": "no_image",
+      "options": ["10°", "20°", "25°"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 13,
+      "question": "Ushbu belgi axborot beradi:",
+      "image": "2.13.png",
+      "options": ["Siz o'ngga yoki chapga burilishingiz kerakligini ko'rsatadi", "Reversiv harakatlanish yo'liga chiqish haqida", "Chorrahadan o'ngga va chapga bir tomonlama harakat tashkil qilingan"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 14,
+      "question": "Ushbu yo'l chizig'i sizga qanday manyovr bajarishni taqiqlaydi?",
+      "image": "2.14.png",
+      "options": ["Quvib o'tishni", "Aylanib o'tishni", "Qayralib olishni", "Sanab o'tilgan barcha manevrlarga ruxsat beriladi"],
+      "answer": 3
+    },
+    {
+      "ticket": 2,
+      "id": 15,
+      "question": "Svetafor ishoralari qaysi guruh yo'l belgilarini bekor qiladi (miltillovchi sariq ishoradan tashqari)?",
+      "image": "no_image",
+      "options": ["Imtiyoz belgilari", "Taqiqlovchi belgilar", "Buyuruvchi belgilar", "Barcha sanab o'tilganlari"],
+      "answer": 0
+    },
+    {
+      "ticket": 2,
+      "id": 16,
+      "question": "Kunning yorug' vaqtida aholi punktlarida quvib o'tilayotgan transport vositasi haydovchisining e'tiborini jalb qilish uchun mumkin:",
+      "image": "no_image",
+      "options": ["Tovush signalidan foydalanish", "Faqat yaqinni yorituvchi chiroqni uzoqni yorituvchi chiroqqa qisqa muddat orasida o'tkazish bilan ishora berish", "Faqat birgalikda yorug'lik ishoralari bilan birga tovush signallarini qo'llash", "Sanab o'tilganlarning barchasidan foydalanish"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 17,
+      "question": "Qaysi hollarda transport vositasidan foydalanish taqiqlanadi?",
+      "image": "no_image",
+      "options": ["Yonilg'i darajasini ko'rsatish qurilmasi ishlamaydi", "O't oldirish tizimi nosoz", "Dvigatel qiyinchilik bilan ishga tushadi", "Tovush signallari ishlamaydi"],
+      "answer": 3
+    },
+    {
+      "ticket": 2,
+      "id": 18,
+      "question": "72 km/soat tezlikda harakatlanayotgan transport vositasi 1 sekundda qancha masofani bosib o'tadi?",
+      "image": "no_image",
+      "options": ["15 m", "20 m", "25 m"],
+      "answer": 1
+    },
+    {
+      "ticket": 2,
+      "id": 19,
+      "question": "Qaysi yo'nalishda harakatlanishni davom ettirishingiz mumkin?",
+      "image": "2.19.png",
+      "options": ["Faqat chapga", "Chapga va orqaga qayrilib olishga", "O'ngga, chapga va orqaga qayrilib olishga"],
+      "answer": 2
+    },
+    {
+      "ticket": 2,
+      "id": 20,
+      "question": "Yo'l-transport hodisasi sodir bo'lganda haydovchi birinchi navbatda nima qilishga majbur?",
+      "image": "no_image",
+      "options": ["Transport vositasini zudlik bilan to'xtatishi, avariya ishoratlarini yoqishi va avariya to'xtash belgisini o'rnatishi", "Zudlik bilan tez yordam yoki militsiya chaqirishi", "Yo'lovchilarni tushirishi va harakatni davom ettirishi"],
+      "answer": 0
+    }
+  ],
