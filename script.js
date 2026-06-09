@@ -1,16 +1,13 @@
-// Переменные состояния теста
 let currentTicket = null;
 let currentQuestionIndex = 0;
 let correctAnswersCount = 0;
 let incorrectAnswersCount = 0;
 let timerInterval = null;
-let timeLeft = 20 * 60; // 20 минут в секундах
+let timeLeft = 20 * 60; // 20 минут
 
-// Инициализация при загрузке страницы
 window.addEventListener("DOMContentLoaded", () => {
-    // Проверяем, загрузились ли данные из data.js
     if (typeof allTickets === "undefined") {
-        alert("Xatolik: 'data.js' fayli yuklanmadi yoki unda xatolik bor! Oxiridagi qavslarni tekshiring.");
+        alert("script.js ne zagruzilsya ili soderjit oshibki!");
         return;
     }
     generateTicketsGrid();
@@ -19,75 +16,86 @@ window.addEventListener("DOMContentLoaded", () => {
 // 1. Генерация сетки билетов (от 1 до 60)
 function generateTicketsGrid() {
     const grid = document.getElementById("tickets-grid");
-    grid.innerHTML = ""; // Очищаем перед заполнением
+    if (!grid) return;
+    grid.innerHTML = ""; 
 
     for (let i = 1; i <= 60; i++) {
         const btn = document.createElement("button");
-        btn.className = "ticket-btn"; // Стили берутся из твоего style.css
+        // Присваиваем класс btn, так как он у тебя используется для стилей
+        btn.className = "btn"; 
+        btn.style.margin = "5px"; // Небольшой отступ между кнопками
         btn.innerText = `${i}-bilet`;
         
-        // Вешаем событие клика на каждый билет
         btn.onclick = () => startQuiz(i);
         grid.appendChild(btn);
     }
 }
 
-// 2. Старт теста для выбранного билета
+// 2. Старт теста
 function startQuiz(ticketNumber) {
-    // Проверяем, есть ли такой билет в базе данных
-    if (!allTickets[ticketNumber] || allTickets[ticketNumber].length === 0) {
-        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi! (data.js faylini tekshiring)`);
+    // Превращаем число в строку, так как в твоем data.js ключи "1", "2" — это строки
+    const ticketKey = String(ticketNumber);
+
+    if (!allTickets[ticketKey]) {
+        alert(`${ticketNumber}-bilet ma'lumotlari topilmadi!`);
         return;
     }
 
-    currentTicket = allTickets[ticketNumber];
+    currentTicket = allTickets[ticketKey];
     currentQuestionIndex = 0;
     correctAnswersCount = 0;
     incorrectAnswersCount = 0;
-    timeLeft = 20 * 60; // Сброс таймера на 20 минут
+    timeLeft = 20 * 60; 
 
-    // Переключение экранов
+    // Показываем/скрываем контейнеры строго по твоим ID в HTML
     document.getElementById("menu-container").style.display = "none";
     document.getElementById("quiz-container").style.display = "block";
     document.getElementById("result-container").style.display = "none";
 
-    // Запуск таймера и показ первого вопроса
     startTimer();
     showQuestion();
 }
 
-// 3. Отображение текущего вопроса
+// 3. Отображение вопроса
 function showQuestion() {
     const question = currentTicket[currentQuestionIndex];
 
-    // Обновляем информацию о номере билета и вопроса
+    // Заполняем информацию о билете и текст вопроса
     document.getElementById("ticket-info").innerText = `${question.ticket}-bilet, ${currentQuestionIndex + 1}-savol`;
     document.getElementById("question-text").innerText = question.question;
 
-    // Безопасная обработка картинок (чтобы код не падал из-за no_image)
+    // Работа с картинкой
     const qImg = document.getElementById("question-img");
-    if (question.image && question.image !== "no_image") {
-        qImg.src = question.image; // Если картинки в папке, используй: "images/" + question.image
-        qImg.style.display = "block";
-    } else {
-        qImg.src = "";
-        qImg.style.display = "none";
+    if (qImg) {
+        if (question.image && question.image !== "no_image") {
+            qImg.src = question.image; 
+            qImg.style.display = "block";
+        } else {
+            qImg.src = "";
+            qImg.style.display = "none";
+        }
     }
 
-    // Отображение вариантов ответов
+    // Рендерим варианты ответов
     const optionsContainer = document.getElementById("options-container");
-    optionsContainer.innerHTML = ""; // Очищаем старые варианты
+    if (optionsContainer) {
+        optionsContainer.innerHTML = ""; 
 
-    question.options.forEach((option, index) => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn";
-        btn.innerText = option;
-        btn.onclick = () => checkAnswer(index);
-        optionsContainer.appendChild(btn);
-    });
+        question.options.forEach((option, index) => {
+            const btn = document.createElement("button");
+            btn.className = "btn"; // Используем твой стандартный класс кнопок
+            btn.style.display = "block";
+            btn.style.width = "100%";
+            btn.style.margin = "10px 0";
+            btn.innerText = option;
+            
+            btn.onclick = () => checkAnswer(index);
+            optionsContainer.appendChild(btn);
+        });
+    }
 }
 
-// 4. Проверка выбранного ответа
+// 4. Проверка ответа
 function checkAnswer(selectedIndex) {
     const question = currentTicket[currentQuestionIndex];
 
@@ -97,7 +105,6 @@ function checkAnswer(selectedIndex) {
         incorrectAnswersCount++;
     }
 
-    // Переходим к следующему вопросу или завершаем тест
     currentQuestionIndex++;
     if (currentQuestionIndex < currentTicket.length) {
         showQuestion();
@@ -106,9 +113,9 @@ function checkAnswer(selectedIndex) {
     }
 }
 
-// 5. Работа таймера
+// 5. Таймер
 function startTimer() {
-    clearInterval(timerInterval); // На всякий случай очищаем старый таймер
+    clearInterval(timerInterval);
     updateTimerDOM();
 
     timerInterval = setInterval(() => {
@@ -123,4 +130,24 @@ function startTimer() {
     }, 1000);
 }
 
-// Об
+function updateTimerDOM() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const formattedTime = `Vaqt: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    document.getElementById("timer").innerText = formattedTime;
+}
+
+// 6. Финиш
+function finishQuiz() {
+    clearInterval(timerInterval);
+
+    document.getElementById("quiz-container").style.display = "none";
+    document.getElementById("result-container").style.display = "block";
+
+    const totalQuestions = currentTicket.length;
+    const skipped = totalQuestions - (correctAnswersCount + incorrectAnswersCount);
+    incorrectAnswersCount += skipped;
+
+    document.getElementById("correct-stat").innerText = `To'g'ri javoblar: ${correctAnswersCount}`;
+    document.getElementById("incorrect-stat").innerText = `Noto'g'ri javoblar: ${incorrectAnswersCount}`;
+}
