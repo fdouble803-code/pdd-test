@@ -4,17 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PDD Test</title>
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Временные базовые стили для сетки, если в style.css что-то не так */
+        #tickets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+        }
+        .ticket-btn {
+            padding: 15px;
+            background-color: #2481cc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
     <div id="app">
         
         <div id="menu-container">
-            <h1 id="menu-title">Biletni tanlang</h1>
+            <h1 id="menu-title" style="text-align: center; padding-top: 10px;">Biletni tanlang</h1>
             <div id="tickets-grid"></div>
         </div>
 
@@ -37,5 +54,30 @@
 
     <script src="data.js"></script>
     <script src="script.js"></script>
+
+    <script>
+        // Если из-за ошибок в script.js меню не создалось, этот блок создаст его принудительно
+        document.addEventListener("DOMContentLoaded", function() {
+            const grid = document.getElementById('tickets-grid');
+            if (grid && grid.children.length === 0) {
+                console.log("Доверенная генерация 60 билетов запущена из HTML");
+                for (let i = 1; i <= 60; i++) {
+                    const button = document.createElement('button');
+                    button.className = 'ticket-btn';
+                    button.innerText = `${i}-bilet`;
+                    
+                    // Привязка к функции старта из script.js
+                    button.onclick = () => {
+                        if (typeof startQuiz === 'function') {
+                            startQuiz(i);
+                        } else {
+                            alert("script.js не загрузился или содержит ошибки!");
+                        }
+                    };
+                    grid.appendChild(button);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
