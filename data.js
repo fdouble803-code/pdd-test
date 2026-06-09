@@ -20,7 +20,7 @@ const allTickets = {
         { "ticket": 1, "id": 18, "question": "Qanday hollarda aholi punktlarida tovush moslamalaridan foydalanishga ruxsat etiladi?", "image": "no_image", "options": ["Quvib o'tishda ogohlantirish uchun", "Yo'l-transport hodisasining oldini olish uchun", "Har ikkala sanab o'tilgan hollarda"], "answer": 1 },
         { "ticket": 1, "id": 19, "question": "Ko'rsatilgan qaysi belgilar sizga yashash manzilingizga avtomobilda o'tishga ruxsat beradi?", "image": "1.19.png", "options": ["Faqat A", "Faqat B", "Faqat A va B", "Barchasi"], "answer": 2 },
         { "ticket": 1, "id": 20, "question": "Sariq rangli miltillovchi ishora nimani bildiradi?", "image": "no_image", "options": ["Harakatni taqiqlaydi", "Chorrahani yoki yo'lning xavfli qismini tartibga solinmaganligini bildiradi va harakat qatnashchilarini ogohlantiradi", "Faqat piyodalarga yo'l berish kerakligini bildiradi"], "answer": 1 }
-    ],
+    ]
   "2": [
     {
       "ticket": 2,
@@ -181,5 +181,5 @@ const allTickets = {
       "image": "no_image",
       "options": ["Transport vositasini zudlik bilan to'xtatishi, avariya ishoratlarini yoqishi va avariya to'xtash belgisini o'rnatishi", "Zudlik bilan tez yordam yoki militsiya chaqirishi", "Yo'lovchilarni tushirishi va harakatni davom ettirishi"],
       "answer": 0
-    }
-  ],
+    ]
+};
