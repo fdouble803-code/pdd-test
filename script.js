@@ -3,17 +3,18 @@ let currentQuestionIndex = 0;
 let correctAnswersCount = 0;
 let incorrectAnswersCount = 0;
 let timerInterval = null;
-let timeLeft = 20 * 60; // 20 минут
+let timeLeft = 20 * 60; // 20 минут в секундах
 
 window.addEventListener("DOMContentLoaded", () => {
+    // Проверяем, загрузилась ли база данных
     if (typeof allTickets === "undefined") {
-        console.error("data.js fayli yuklanmagan yoki xato bor!");
+        console.error("data.js fayli topilmadi yoki yuklanishda xato bor!");
         return;
     }
     generateTicketsGrid();
 });
 
-// 1. Генерация сетки билетов
+// 1. Создание кнопок билетов (от 1 до 60)
 function generateTicketsGrid() {
     const grid = document.getElementById("tickets-grid");
     if (!grid) return;
@@ -22,7 +23,6 @@ function generateTicketsGrid() {
     for (let i = 1; i <= 60; i++) {
         const btn = document.createElement("button");
         btn.className = "btn"; 
-        btn.style.margin = "5px";
         btn.innerText = `${i}-bilet`;
         
         btn.onclick = () => startQuiz(i);
@@ -30,21 +30,22 @@ function generateTicketsGrid() {
     }
 }
 
-// 2. Старт теста
+// 2. Старт теста при клике на билет
 function startQuiz(ticketNumber) {
-    const ticketKey = String(ticketNumber);
+    // Получаем билет напрямую по числу или по строке (убирает баг пустого экрана)
+    currentTicket = allTickets[ticketNumber] || allTickets[String(ticketNumber)];
 
-    if (!allTickets || !allTickets[ticketKey]) {
-        alert(`Baza ma'lumotlarida ${ticketNumber}-bilet hali yo'q! 1-biletni tekshiring.`);
+    if (!currentTicket) {
+        alert(`Baza ma'lumotlarida ${ticketNumber}-bilet topilmadi! Data.js faylini tekshiring.`);
         return;
     }
 
-    currentTicket = allTickets[ticketKey];
     currentQuestionIndex = 0;
     correctAnswersCount = 0;
     incorrectAnswersCount = 0;
     timeLeft = 20 * 60; 
 
+    // Переключаем экраны
     document.getElementById("menu-container").style.display = "none";
     document.getElementById("quiz-container").style.display = "block";
     document.getElementById("result-container").style.display = "none";
@@ -53,27 +54,30 @@ function startQuiz(ticketNumber) {
     showQuestion();
 }
 
-// 3. Отображение вопроса
+// 3. Вывод вопроса на экран
 function showQuestion() {
     const question = currentTicket[currentQuestionIndex];
 
     document.getElementById("ticket-info").innerText = `${question.ticket}-bilet, ${currentQuestionIndex + 1}-savol`;
     document.getElementById("question-text").innerText = question.question;
 
-    // Картинка
+    // Работа с картинкой вопроса
     const qImg = document.getElementById("question-img");
     if (qImg) {
         if (question.image && question.image !== "no_image") {
+            // Если картинки лежат в папке images, добавь перед путем: `images/${question.image}`
             qImg.src = question.image; 
             qImg.style.display = "block";
             qImg.style.maxWidth = "100%";
+            qImg.style.marginTop = "15px";
+            qImg.style.borderRadius = "8px";
         } else {
             qImg.src = "";
             qImg.style.display = "none";
         }
     }
 
-    // Кнопки ответов
+    // Вывод кнопок вариантов ответов
     const optionsContainer = document.getElementById("options-container");
     if (optionsContainer) {
         optionsContainer.innerHTML = ""; 
@@ -85,44 +89,43 @@ function showQuestion() {
             btn.style.width = "100%";
             btn.style.margin = "10px 0";
             btn.style.textAlign = "left";
-            btn.style.transition = "background-color 0.2s";
             btn.innerText = option;
             
-            // Передаем саму кнопку, выбранный индекс и правильный ответ
+            // Клик отправляет саму кнопку, её индекс и правильный индекс из базы
             btn.onclick = () => checkAnswer(btn, index, question.answer);
             optionsContainer.appendChild(btn);
         });
     }
 }
 
-// 4. Проверка и моментальное окрашивание кнопок
+// 4. Проверка ответа и подсветка (Красный / Зеленый)
 function checkAnswer(clickedButton, selectedIndex, correctIndex) {
     const optionsContainer = document.getElementById("options-container");
     const allButtons = optionsContainer.querySelectorAll("button");
 
-    // Выключаем клики по всем кнопкам, чтобы не нажимали повторно
+    // Моментально блокируем все кнопки от повторных кликов
     allButtons.forEach(btn => {
         btn.disabled = true;
         btn.style.pointerEvents = "none";
     });
 
     if (selectedIndex === correctIndex) {
-        // Если угадал — делаем её зелёной
-        clickedButton.style.backgroundColor = "#2ecc71";
-        clickedButton.style.color = "#ffffff";
+        // Угадал -> красим нажатую кнопку в ЗЕЛЕНЫЙ
+        clickedButton.style.setProperty("background-color", "#2ecc71", "important");
+        clickedButton.style.setProperty("color", "#ffffff", "important");
         correctAnswersCount++;
     } else {
-        // Если не угадал — выбранную в красный
-        clickedButton.style.backgroundColor = "#e74c3c";
-        clickedButton.style.color = "#ffffff";
+        // Ошибка -> красим нажатую кнопку в КРАСНЫЙ
+        clickedButton.style.setProperty("background-color", "#e74c3c", "important");
+        clickedButton.style.setProperty("color", "#ffffff", "important");
         
-        // А правильную подсвечиваем зелёным
-        allButtons[correctIndex].style.backgroundColor = "#2ecc71";
-        allButtons[correctIndex].style.color = "#ffffff";
+        // И автоматически подсвечиваем ПРАВИЛЬНЫЙ ответ ЗЕЛЕНЫМ
+        allButtons[correctIndex].style.setProperty("background-color", "#2ecc71", "important");
+        allButtons[correctIndex].style.setProperty("color", "#ffffff", "important");
         incorrectAnswersCount++;
     }
 
-    // Пауза 1.5 секунды, чтобы юзер увидел, где был правильный ответ
+    // Задержка 1.5 секунды, чтобы юзер успел увидеть цвета
     setTimeout(() => {
         currentQuestionIndex++;
         if (currentQuestionIndex < currentTicket.length) {
@@ -133,7 +136,7 @@ function checkAnswer(clickedButton, selectedIndex, correctIndex) {
     }, 1500);
 }
 
-// 5. Таймер
+// 5. Логика работы таймера
 function startTimer() {
     clearInterval(timerInterval);
     updateTimerDOM();
@@ -155,7 +158,7 @@ function updateTimerDOM() {
     document.getElementById("timer").innerText = `Vaqt: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// 6. Результаты
+// 6. Экран результатов
 function finishQuiz() {
     clearInterval(timerInterval);
 
