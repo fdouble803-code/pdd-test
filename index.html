@@ -4,123 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PDD Test</title>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    
     <style>
-        /* Железные базовые стили сетки */
+        /* Основные стили страницы */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b1424; /* Темно-синий фон как на скриншоте */
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 600px; /* Ограничение ширины для десктопа */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Меню выбора билетов */
         #tickets-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            gap: 15px;
+            margin-top: 20px;
         }
+
         .ticket-btn {
-            background-color: #1c355e;
-            color: #ffffff;
-            border: 2px solid #2481cc;
+            background-color: #2481cc; /* Синий цвет кнопок */
+            color: white;
+            border: none;
             border-radius: 8px;
-            padding: 15px 10px;
+            padding: 15px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            text-align: center;
-            transition: background 0.2s;
+            transition: background-color 0.2s;
         }
-        .ticket-btn:active {
-            background-color: #2481cc;
-        }
-    </style>
-</head>
-<body>
+        .ticket-btn:active { background-color: #1a5c91; }
 
-    <div id="app">
+        /* Экраны квиза и результатов скрыты по умолчанию */
+        #quiz-container, #result-container { display: none; }
+
+        /* Панель информации вопроса (таймер и номер) */
+        #quiz-info-bar { margin-bottom: 15px; }
+        #timer { font-size: 18px; float: right; }
+        #ticket-info { font-size: 16px; opacity: 0.8; }
+
+        /* Текст вопроса */
+        #question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Картинка вопроса */
+        #question-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none; /* Скрыта, если нет изображения */
+        }
+
+        /* Контейнер ответов */
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Обычная кнопка ответа */
+        .option-btn {
+            background-color: #1e3a5f; /* Темно-синий фон ответа */
+            color: white;
+            border: 1px solid #2e5a90; /* Легкая граница */
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
         
-        <div id="menu-container">
-            <h1 id="menu-title" style="text-align: center; color: white; margin-top: 20px;">Biletni tanlang</h1>
-            <div id="tickets-grid">
-                <button class="ticket-btn" onclick="selectTicket(1)">1-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(2)">2-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(3)">3-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(4)">4-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(5)">5-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(6)">6-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(7)">7-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(8)">8-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(9)">9-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(10)">10-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(11)">11-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(12)">12-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(13)">13-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(14)">14-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(15)">15-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(16)">16-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(17)">17-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(18)">18-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(19)">19-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(20)">20-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(21)">21-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(22)">22-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(23)">23-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(24)">24-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(25)">25-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(26)">26-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(27)">27-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(28)">28-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(29)">29-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(30)">30-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(31)">31-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(32)">32-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(33)">33-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(34)">34-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(35)">35-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(36)">36-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(37)">37-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(38)">38-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(39)">39-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(40)">40-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(41)">41-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(42)">42-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(43)">43-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(44)">44-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(45)">45-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(46)">46-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(47)">47-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(48)">48-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(49)">49-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(50)">50-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(51)">51-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(52)">52-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(53)">53-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(54)">54-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(55)">55-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(56)">56-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(57)">57-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(58)">58-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(59)">59-bilet</button>
-                <button class="ticket-btn" onclick="selectTicket(60)">60-bilet</button>
-            </div>
-        </div>
+        /* Эффект при наведении (только если кнопка активна) */
+        .option-btn:not(.disabled):hover { background-color: #2e5a90; }
 
-        <div id="quiz-container" style="display:none;">
-            <div id="timer">Vaqt: 20:00</div>
-            <div id="ticket-info"></div>
-            <div id="question-text"></div>
-            <img id="question-img" src="" style="display:none;" alt="Rasm">
-            <div id="options-container"></div>
-        </div>
-
-        <div id="result-container" style="display:none;">
-            <h2>Natija</h2>
-            <div id="correct-stat"></div>
-            <div id="incorrect-stat"></div>
-            <button class="btn" onclick="location.reload()">Bosh menyu</button>
-        </div>
-
-    </div>
-
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+        /* КЛАССЫ ДЛЯ ПОДСВЕТКИ */
+        
+        /* 1. Класс disabled: применяется ко всем кнопкам после клика, отключает нажатия */
+        .option-btn
