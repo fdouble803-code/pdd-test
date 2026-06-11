@@ -34,4 +34,40 @@
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
+</html><!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PDD Test</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <div id="menu-container">
+            <h1 id="menu-title">Biletni tanlang</h1>
+            <div id="tickets-grid"></div>
+        </div>
+
+        <div id="quiz-container" style="display:none;">
+            <div id="timer">Vaqt: 20:00</div>
+            <div id="ticket-info"></div>
+            <div id="question-text"></div>
+            <img id="question-img" src="" style="display:none;">
+            <div id="options-container"></div>
+        </div>
+
+        <div id="result-container" style="display:none;">
+            <h2>Natija</h2>
+            <div id="correct-stat"></div>
+            <div id="incorrect-stat"></div>
+            <button class="btn" onclick="location.reload()">Bosh menyu</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>
